@@ -56,10 +56,10 @@ export default function Navbar() {
         >
           <h1 className="text-2xl font-bold tracking-tight">
             <span className="text-slate-900 group-hover:text-slate-700 transition-colors">
-              Central
+              Raj
             </span>{" "}
             <span className="text-slate-500 group-hover:text-slate-600 transition-colors">
-              Biomedicals
+              Biosis
             </span>
           </h1>
         </Link>

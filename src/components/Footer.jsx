@@ -45,7 +45,7 @@ export default function Footer() {
           doc(
             db,
             "websites",
-            "centralbiomedicals",
+            "radioimmunoassayin",
             "pages",
             "contact"
           )
@@ -76,7 +76,7 @@ export default function Footer() {
           doc(
             db,
             "websites",
-            "centralbiomedicals",
+            "radioimmunoassayin",
             "districts",
             district
           )
@@ -163,10 +163,10 @@ export default function Footer() {
 
             <h2 className="text-3xl font-bold tracking-tight">
               <span className="text-slate-900">
-                Central
+                Raj
               </span>{" "}
               <span className="text-slate-600">
-                Biomedicals
+                Biosis
               </span>
             </h2>
 
@@ -326,7 +326,7 @@ export default function Footer() {
         <div className="mt-14 pt-8 border-t border-slate-200 flex flex-col lg:flex-row items-center justify-between gap-4">
 
           <p className="text-slate-500 text-center lg:text-left">
-            © 2026 <span className="font-semibold text-slate-800">Central Biomedicals</span>. All Rights Reserved.
+            © 2026 <span className="font-semibold text-slate-800">Raj Biosis</span>. All Rights Reserved.
           </p>
 
           <p className="text-slate-500 text-center">

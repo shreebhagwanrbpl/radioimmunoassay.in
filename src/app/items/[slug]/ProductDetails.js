@@ -69,7 +69,7 @@ export default function ProductDetails({ slug }) {
                     doc(
                         db,
                         "websites",
-                        "centralbiomedicals",
+                        "radioimmunoassayin",
                         "pages",
                         "products"
                     )
@@ -92,7 +92,7 @@ export default function ProductDetails({ slug }) {
                     collection(
                         db,
                         "websites",
-                        "centralbiomedicals",
+                        "radioimmunoassayin",
                         "pages",
                         "categoryproducts",
                         "categories"
@@ -193,7 +193,7 @@ export default function ProductDetails({ slug }) {
                 collection(
                     db,
                     "websitesQueries",
-                    "centralbiomedicals",
+                    "radioimmunoassayin",
                     "productQueries"
                 ),
                 {
@@ -236,7 +236,7 @@ export default function ProductDetails({ slug }) {
                 product.title,
             brand: {
                 "@type": "Brand",
-                name: product.brand || "Central Biomedicals",
+                name: product.brand || "Raj Biosis",
             },
         }
         : null;
@@ -910,8 +910,8 @@ ${product?.desc}
 
                                 {[
                                     {
-                                        title: `Why Choose Central Biomedicals in ${cityName}?`,
-                                        content: `Central Biomedicals is a trusted supplier and distributor of ${product.title} in ${cityName}. We provide high-quality biomedical and laboratory equipment for hospitals, pathology laboratories, diagnostic centres, research institutions, and healthcare facilities with dependable technical support and professional service.`,
+                                        title: `Why Choose Raj Biosis in ${cityName}?`,
+                                        content: `Raj Biosis is a trusted supplier and distributor of ${product.title} in ${cityName}. We provide high-quality biomedical and laboratory equipment for hospitals, pathology laboratories, diagnostic centres, research institutions, and healthcare facilities with dependable technical support and professional service.`,
                                     },
                                     {
                                         title: `Features of ${product.title}`,
@@ -923,7 +923,7 @@ ${product?.desc}
                                     },
                                     {
                                         title: `${product.title} Supplier in ${cityName}`,
-                                        content: `Central Biomedicals supplies ${product.title} in ${cityName} with professional consultation, installation support, operator guidance, and dependable after-sales service for healthcare organizations.`,
+                                        content: `Raj Biosis supplies ${product.title} in ${cityName} with professional consultation, installation support, operator guidance, and dependable after-sales service for healthcare organizations.`,
                                     },
                                     {
                                         title: `${product.title} Dealer in ${cityName}`,
@@ -935,7 +935,7 @@ ${product?.desc}
                                     },
                                     {
                                         title: `Buy ${product.title} in ${cityName}`,
-                                        content: `Purchase high-quality ${product.title} in ${cityName} at competitive prices. Contact Central Biomedicals for the latest quotation, product availability, and expert recommendations.`,
+                                        content: `Purchase high-quality ${product.title} in ${cityName} at competitive prices. Contact Raj Biosis for the latest quotation, product availability, and expert recommendations.`,
                                     },
                                     {
                                         title: `${product.title} Price in ${cityName}`,
@@ -1023,7 +1023,7 @@ ${product?.desc}
                                             answer: `Yes. We supply biomedical equipment across India with secure packaging, reliable logistics, and timely delivery.`,
                                         },
                                         {
-                                            question: "How can I contact Central Biomedicals?",
+                                            question: "How can I contact Raj Biosis?",
                                             answer: `You can submit the enquiry form, call our support team, or email us for product information, quotations, and technical assistance.`,
                                         },
                                     ].map((faq, index) => (

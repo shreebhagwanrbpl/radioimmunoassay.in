@@ -31,7 +31,7 @@ export default function SeoContent({ city = "" }) {
 
                         <p className="text-lg leading-8 text-slate-600">
                             <strong className="text-slate-900">
-                                Central Biomedicals
+                                Raj Biosis
                             </strong>{" "}
                             is a trusted supplier of biomedical and laboratory equipment in{" "}
                             <strong>{location}</strong>. We provide CBC Machines,
@@ -70,7 +70,7 @@ export default function SeoContent({ city = "" }) {
                     <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm hover:shadow-lg transition-all duration-300">
 
                         <p className="text-lg leading-8 text-slate-600">
-                            Central Biomedicals supplies biomedical equipment across
+                            Raj Biosis supplies biomedical equipment across
                             multiple districts and cities, helping healthcare providers
                             enhance laboratory productivity, testing efficiency and
                             diagnostic excellence through dependable healthcare
