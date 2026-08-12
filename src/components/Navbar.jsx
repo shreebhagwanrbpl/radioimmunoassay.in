@@ -46,22 +46,19 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/90 backdrop-blur-2xl shadow-sm">
+    <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/95 backdrop-blur-2xl shadow-sm">
       <div className="container-custom flex h-20 items-center justify-between">
 
-        {/* Logo */}
+        {/* Brand Logo */}
         <Link
           href={makeLink("/")}
-          className="group"
+          className="group flex items-center gap-3 py-1"
         >
-          <h1 className="text-2xl font-bold tracking-tight">
-            <span className="text-slate-900 group-hover:text-slate-700 transition-colors">
-              Raj
-            </span>{" "}
-            <span className="text-slate-500 group-hover:text-slate-600 transition-colors">
-              Biosis
-            </span>
-          </h1>
+          <img
+            src="/logo.png"
+            alt="Raj Biosis Private Limited"
+            className="h-12 sm:h-14 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+          />
         </Link>
 
         {/* Desktop Menu */}

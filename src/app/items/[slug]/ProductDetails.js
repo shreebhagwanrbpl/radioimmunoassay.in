@@ -23,6 +23,8 @@ import {
     collection,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { fetchFullCatalog } from "@/lib/data-fetcher";
+import { Download } from "lucide-react";
 const makeSlug = (text = "") =>
     text
         .toLowerCase()
@@ -37,6 +39,7 @@ export default function ProductDetails({ slug }) {
     const [showShare, setShowShare] = useState(false);
 
     const shareRef = useRef();
+    const brochureRef = useRef();
     const [form, setForm] = useState({
         name: "",
         email: "",
@@ -45,6 +48,14 @@ export default function ProductDetails({ slug }) {
 
     const [submitting, setSubmitting] =
         useState(false);
+    const [downloading, setDownloading] = useState(false);
+    const [brochureImage, setBrochureImage] = useState("");
+    const [contactData, setContactData] = useState({
+        phone: "+91 9983123469\n+91 9983333489",
+        email: "rajbiosis@yahoo.in",
+        address: "F-4, 1st Floor, Plot No. 16, D-Block Tagor Nagar, on Ajmer-Delhi, 200 Feet Bypass Rd, Jaipur, Rajasthan 302021"
+    });
+
     const pathname = usePathname();
 
     const pathParts = pathname
@@ -52,7 +63,7 @@ export default function ProductDetails({ slug }) {
         .filter(Boolean);
 
     const city =
-        pathParts.length > 1
+        pathParts.length > 1 && !["about", "services", "items", "contact"].includes(pathParts[0])
             ? pathParts[0]
             : "India";
 
@@ -63,103 +74,130 @@ export default function ProductDetails({ slug }) {
     useEffect(() => {
         const loadProduct = async () => {
             try {
-
-                // NORMAL PRODUCTS
-                const snap = await getDoc(
-                    doc(
-                        db,
-                        "websites",
-                        "radioimmunoassayin",
-                        "pages",
-                        "products"
-                    )
-                );
-
-                let allProducts = [];
-
-                if (snap.exists()) {
-                    allProducts = (snap.data().products || []).map((item) => ({
-                        ...item,
-                        slug:
-                            item.slug ||
-                            item.productSlug ||
-                            makeSlug(item.title),
-                    }));
-                }
-
-                // CATEGORY PRODUCTS
-                const categorySnap = await getDocs(
-                    collection(
-                        db,
-                        "websites",
-                        "radioimmunoassayin",
-                        "pages",
-                        "categoryproducts",
-                        "categories"
-                    )
-                );
-
-                categorySnap.forEach((docSnap) => {
-                    const data = docSnap.data();
-
-                    if (data.products?.length) {
-                        allProducts.push(
-                            ...(data.products || []).map((item) => ({
-                                ...item,
-                                slug:
-                                    item.slug ||
-                                    item.productSlug ||
-                                    makeSlug(item.title),
-                            }))
-                        );
-                    }
-                });
-
+                const allProducts = await fetchFullCatalog();
                 const found = allProducts.find(
                     (p) => p.slug === slug
                 );
-                console.log("URL SLUG:", slug);
-
-                allProducts.forEach((p) => {
-                    console.log("PRODUCT:", p.title);
-                    console.log("PRODUCT SLUG:", p.slug);
-                });
-                console.log("SLUG FROM URL:", slug);
-                console.log(
-                    "TOTAL PRODUCTS:",
-                    allProducts.length
-                );
-                console.log(
-                    "FOUND PRODUCT:",
-                    found
-                );
-
                 setProduct(found || null);
 
                 if (found) {
-
-                    if (
-                        found.images?.length > 0
-                    ) {
-                        setSelectedImage(
-                            found.images[0]
-                        );
+                    if (found.images?.length > 0) {
+                        setSelectedImage(found.images[0]);
                     } else {
-                        setSelectedImage(
-                            found.image || ""
-                        );
+                        setSelectedImage(found.image || "");
                     }
-
                     setSelectedMedia("image");
                 }
-
             } catch (error) {
-                console.error(error);
+                console.error("Error loading product catalog:", error);
+            }
+        };
+
+        const loadContact = async () => {
+            try {
+                const snap = await getDoc(
+                    doc(db, "websites", "safekitin", "pages", "contact")
+                );
+                if (snap.exists()) {
+                    const info = snap.data().contactInfo || [];
+                    const phoneVal = info.find(x => x.label === "Phone Number")?.value || "";
+                    const emailVal = info.find(x => x.label === "Email Address")?.value || "";
+                    const addressVal = info.find(x => x.label === "Office Address")?.value || "";
+                    setContactData({
+                        phone: phoneVal || "+91 9983123469\n+91 9983333489",
+                        email: emailVal || "rajbiosis@yahoo.in",
+                        address: addressVal || "F-4, 1st Floor, Plot No. 16, D-Block Tagor Nagar, on Ajmer-Delhi, 200 Feet Bypass Rd, Jaipur, Rajasthan 302021"
+                    });
+                }
+            } catch (err) {
+                console.error("Error loading contact details:", err);
             }
         };
 
         loadProduct();
+        loadContact();
     }, [slug]);
+
+    const handleDownloadBrochure = async () => {
+        if (downloading || !product) return;
+        setDownloading(true);
+        const toastId = toast.loading("Generating brochure PDF...");
+
+        try {
+            const html2canvas = (await import("html2canvas")).default;
+            const { jsPDF } = await import("jspdf");
+
+            // Convert image to same-origin Base64 to bypass CORS and load instant
+            let base64Img = "";
+            const imageUrl = selectedImage || product.image;
+            if (imageUrl) {
+                try {
+                    // Use Next.js image optimizer endpoint to proxy and bypass CORS
+                    const proxyUrl = `/_next/image?url=${encodeURIComponent(imageUrl)}&w=640&q=75`;
+                    const res = await fetch(proxyUrl);
+                    if (res.ok) {
+                        const blob = await res.blob();
+                        base64Img = await new Promise((resolve) => {
+                            const reader = new FileReader();
+                            reader.onloadend = () => resolve(reader.result);
+                            reader.readAsDataURL(blob);
+                        });
+                    }
+                } catch (imgErr) {
+                    console.error("Error proxying image for brochure:", imgErr);
+                }
+            }
+
+            // Fallback to original URL if proxying failed
+            setBrochureImage(base64Img || imageUrl || "/placeholder.svg");
+
+            const input = brochureRef.current;
+            if (!input) throw new Error("Brochure template not found");
+
+            // Make it temporarily visible offscreen
+            input.style.display = "block";
+            input.style.position = "absolute";
+            input.style.left = "-9999px";
+            input.style.top = "0px";
+
+            // Wait a tiny bit for the base64 image render inside the template (no network load needed!)
+            await new Promise(resolve => setTimeout(resolve, 200));
+
+            const canvas = await html2canvas(input, {
+                useCORS: true,
+                allowTaint: true,
+                scale: 2,
+                logging: false,
+                backgroundColor: "#ffffff"
+            });
+
+            // Hide the template again
+            input.style.display = "none";
+
+            const imgData = canvas.toDataURL("image/png");
+            
+            const pdf = new jsPDF({
+                orientation: "portrait",
+                unit: "mm",
+                format: "a4"
+            });
+
+            const imgWidth = 210;
+            const pageHeight = 297;
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+            const height = Math.min(imgHeight, pageHeight);
+
+            pdf.addImage(imgData, "PNG", 0, 0, imgWidth, height, undefined, 'FAST');
+            pdf.save(`Raj_Biosis_${product.title.replace(/\s+/g, "_")}_Brochure.pdf`);
+
+            toast.success("Brochure downloaded successfully!", { id: toastId });
+        } catch (error) {
+            console.error("Error generating PDF brochure:", error);
+            toast.error("Failed to generate PDF. Please try again.", { id: toastId });
+        } finally {
+            setDownloading(false);
+        }
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -228,16 +266,58 @@ export default function ProductDetails({ slug }) {
         ? {
             "@context": "https://schema.org",
             "@type": "Product",
-            name: product.title,
-            image: product.image ? [product.image] : [],
+            name: `${product.title} ${cityName !== "India" ? `in ${cityName}` : ""}`,
+            image: product.image ? [product.image] : (product.images || []),
             description:
                 product.desc ||
                 product.description ||
-                product.title,
+                `Buy ${product.title} at best price ${cityName !== "India" ? `in ${cityName}` : "in India"}. Trusted supplier, dealer, and distributor of ${product.title} for laboratory and hospital setup by Raj Biosis.`,
+            sku: product.slug || product.uid || "RB-PROD",
             brand: {
                 "@type": "Brand",
                 name: product.brand || "Raj Biosis",
             },
+            offers: {
+                "@type": "Offer",
+                url: `https://radioimmunoassay.in/items/${product.slug}`,
+                priceCurrency: "INR",
+                price: product.price || "Contact for Price",
+                priceValidUntil: "2027-12-31",
+                itemCondition: "https://schema.org/NewCondition",
+                availability: "https://schema.org/InStock",
+                seller: {
+                    "@type": "Organization",
+                    name: "Raj Biosis",
+                },
+                areaServed: cityName !== "India" ? cityName : "India",
+            },
+        }
+        : null;
+
+    const breadcrumbSchema = product
+        ? {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+                {
+                    "@type": "ListItem",
+                    position: 1,
+                    name: "Home",
+                    item: "https://radioimmunoassay.in",
+                },
+                {
+                    "@type": "ListItem",
+                    position: 2,
+                    name: "Products",
+                    item: "https://radioimmunoassay.in/items",
+                },
+                {
+                    "@type": "ListItem",
+                    position: 3,
+                    name: product.title,
+                    item: `https://radioimmunoassay.in/items/${product.slug}`,
+                },
+            ],
         }
         : null;
 
@@ -248,18 +328,18 @@ export default function ProductDetails({ slug }) {
             mainEntity: [
                 {
                     "@type": "Question",
-                    name: `What is ${product.title} used for?`,
+                    name: `What is ${product.title} used for ${cityName !== "India" ? `in ${cityName}` : ""}?`,
                     acceptedAnswer: {
                         "@type": "Answer",
-                        text: `${product.title} is used in hospitals, pathology labs and diagnostic centres.`,
+                        text: `${product.title} is high-precision biomedical equipment used in hospitals, pathology labs, diagnostic centres, and research facilities ${cityName !== "India" ? `across ${cityName}` : "across India"}.`,
                     },
                 },
                 {
                     "@type": "Question",
-                    name: "Do you provide installation support?",
+                    name: `How to buy ${product.title} ${cityName !== "India" ? `in ${cityName}` : "in India"}?`,
                     acceptedAnswer: {
                         "@type": "Answer",
-                        text: "Yes, installation and technical support are available.",
+                        text: `You can purchase ${product.title} directly from Raj Biosis. Contact us for quotation, warranty details, on-site installation, and operator staff training.`,
                     },
                 },
             ],
@@ -332,118 +412,45 @@ ${product?.desc}
             <section className="py-10 md:py-20 bg-slate-50">
                 <div className="container-custom">
 
-                    <div className="grid gap-12 lg:grid-cols-2">
+                    <div className="grid lg:grid-cols-2 gap-12">
 
-                        {/* Image Skeleton */}
-                        <div className="rounded-[36px] border border-slate-200 bg-white p-6 shadow-sm">
+                        <div className="h-[420px] md:h-[520px] rounded-[36px] bg-slate-200 animate-pulse" />
 
-                            <div className="flex h-[420px] md:h-[520px] items-center justify-center rounded-[28px] bg-slate-100 animate-pulse" />
+                        <div>
+                            <div className="h-12 w-3/4 bg-slate-200 rounded-xl animate-pulse mb-8" />
 
-                        </div>
-
-                        {/* Content Skeleton */}
-                        <div className="rounded-[36px] border border-slate-200 bg-white p-8 shadow-sm">
-
-                            {/* Badge */}
-                            <div className="mb-6 h-10 w-36 rounded-full bg-slate-200 animate-pulse" />
-
-                            {/* Title */}
-                            <div className="mb-4 h-12 w-4/5 rounded-xl bg-slate-200 animate-pulse" />
-                            <div className="mb-8 h-12 w-2/3 rounded-xl bg-slate-200 animate-pulse" />
-
-                            {/* Divider */}
-                            <div className="mb-8 h-1 w-20 rounded-full bg-slate-200 animate-pulse" />
-
-                            {/* Paragraph */}
-                            {[...Array(5)].map((_, i) => (
+                            {[...Array(8)].map((_, i) => (
                                 <div
                                     key={i}
-                                    className={`mb-4 h-5 rounded-lg bg-slate-200 animate-pulse ${i === 4 ? "w-3/4" : "w-full"
-                                        }`}
+                                    className="h-6 bg-slate-200 rounded-lg animate-pulse mb-4"
                                 />
                             ))}
-
-                            {/* Feature Cards */}
-                            <div className="mt-10 grid gap-4 sm:grid-cols-2">
-
-                                {[1, 2].map((item) => (
-                                    <div
-                                        key={item}
-                                        className="rounded-2xl border border-slate-200 bg-slate-50 p-5"
-                                    >
-                                        <div className="mb-4 h-12 w-12 rounded-xl bg-slate-200 animate-pulse" />
-                                        <div className="mb-3 h-5 w-3/4 rounded bg-slate-200 animate-pulse" />
-                                        <div className="h-4 w-full rounded bg-slate-200 animate-pulse" />
-                                        <div className="mt-2 h-4 w-2/3 rounded bg-slate-200 animate-pulse" />
-                                    </div>
-                                ))}
-
-                            </div>
-
                         </div>
 
                     </div>
-                    <div className="mt-16 grid gap-8 lg:grid-cols-[600px_1fr]">
 
-                        {/* Left Card Skeleton */}
-                        <div className="rounded-[32px] border border-slate-200 bg-white p-6 md:p-8 shadow-sm">
+                    <div className="mt-16 grid lg:grid-cols-[600px_1fr] gap-8">
 
-                            {/* Badge */}
-                            <div className="mb-6 h-10 w-36 rounded-full bg-slate-200 animate-pulse" />
+                        <div className="bg-white rounded-[24px] md:rounded-[32px] p-5 sm:p-6 md:p-8 shadow-sm">
+                            <div className="h-10 w-48 bg-slate-200 rounded-lg animate-pulse mb-6" />
 
-                            {/* Title */}
-                            <div className="mb-8 h-10 w-56 rounded-xl bg-slate-200 animate-pulse" />
-
-                            {/* Form Fields */}
                             {[...Array(4)].map((_, i) => (
                                 <div
                                     key={i}
-                                    className="mb-5 h-14 rounded-2xl bg-slate-100 animate-pulse"
+                                    className="h-14 bg-slate-200 rounded-2xl animate-pulse mb-4"
                                 />
                             ))}
-
-                            {/* Button */}
-                            <div className="mt-8 h-14 w-full rounded-2xl bg-slate-200 animate-pulse" />
-
                         </div>
 
-                        {/* Right Card Skeleton */}
-                        <div className="rounded-[32px] border border-slate-200 bg-white p-6 md:p-8 shadow-sm">
+                        <div className="bg-white rounded-[24px] md:rounded-[32px] p-5 sm:p-6 md:p-8 shadow-sm">
+                            <div className="h-10 w-60 bg-slate-200 rounded-lg animate-pulse mb-6" />
 
-                            {/* Badge */}
-                            <div className="mb-6 h-10 w-40 rounded-full bg-slate-200 animate-pulse" />
-
-                            {/* Title */}
-                            <div className="mb-8 h-10 w-64 rounded-xl bg-slate-200 animate-pulse" />
-
-                            {/* Divider */}
-                            <div className="mb-8 h-1 w-20 rounded-full bg-slate-200 animate-pulse" />
-
-                            {/* Paragraph */}
                             {[...Array(6)].map((_, i) => (
                                 <div
                                     key={i}
-                                    className={`mb-4 h-5 rounded-lg bg-slate-200 animate-pulse ${i === 5 ? "w-3/4" : "w-full"
-                                        }`}
+                                    className="h-5 bg-slate-200 rounded animate-pulse mb-4"
                                 />
                             ))}
-
-                            {/* Info Cards */}
-                            <div className="mt-8 grid gap-4 sm:grid-cols-2">
-
-                                {[1, 2].map((item) => (
-                                    <div
-                                        key={item}
-                                        className="rounded-2xl border border-slate-200 bg-slate-50 p-5"
-                                    >
-                                        <div className="mb-4 h-10 w-10 rounded-xl bg-slate-200 animate-pulse" />
-                                        <div className="mb-3 h-5 w-2/3 rounded bg-slate-200 animate-pulse" />
-                                        <div className="h-4 w-full rounded bg-slate-200 animate-pulse" />
-                                    </div>
-                                ))}
-
-                            </div>
-
                         </div>
 
                     </div>
@@ -464,6 +471,13 @@ ${product?.desc}
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
+                    __html: JSON.stringify(breadcrumbSchema),
+                }}
+            />
+
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
                     __html: JSON.stringify(faqSchema),
                 }}
             />
@@ -478,59 +492,85 @@ ${product?.desc}
 
                     <div>
 
-                        <div className="group relative h-[340px] sm:h-[420px] md:h-[500px] lg:h-[580px] overflow-hidden rounded-[36px] border border-slate-200 bg-white shadow-2xl transition-all duration-300 hover:shadow-[0_30px_90px_rgba(15,23,42,0.15)]">
+                        <div className="
+  relative 
+  h-[340px] 
+  sm:h-[420px] 
+  md:h-[500px] 
+  lg:h-[580px]
+  rounded-[24px]
+  md:rounded-[36px]
+  overflow-hidden
+  bg-white
+  border border-[#1D293E]
+  shadow-[0_25px_80px_rgba(123,30,58,0.12)]
+">
+
 
                             {selectedMedia === "video" && product.video ? (
 
-                                <div className="flex h-full items-center justify-center bg-slate-50 p-6">
 
-                                    <video
-                                        controls
-                                        autoPlay
-                                        className="h-full w-full rounded-2xl object-contain"
-                                    >
-                                        <source
-                                            src={product.video}
-                                            type="video/mp4"
-                                        />
-                                    </video>
+                                <video
+                                    controls
+                                    autoPlay
+                                    className="w-full h-full object-contain p-6"
+                                >
 
-                                </div>
+                                    <source
+                                        src={product.video}
+                                        type="video/mp4"
+                                    />
+
+                                </video>
+
 
                             ) : (
 
+
                                 <>
-                                    {/* Skeleton */}
+
+
                                     {!imageLoaded && (
-                                        <div className="absolute inset-0 flex items-center justify-center bg-slate-100 animate-pulse">
-
-                                            <div className="h-40 w-40 rounded-3xl bg-slate-200" />
-
-                                        </div>
+                                        <div className="absolute inset-0 bg-[#F3E5E8] animate-pulse" />
                                     )}
 
-                                    {/* Image */}
+
+
                                     <Image
                                         src={selectedImage || product.image}
                                         alt={product.title}
                                         fill
                                         priority
                                         onLoad={() => setImageLoaded(true)}
-                                        className={`object-contain p-6 transition-all duration-500 group-hover:scale-105 ${imageLoaded ? "opacity-100" : "opacity-0"
-                                            }`}
+                                        className={`
+          object-contain 
+          p-4 
+          transition 
+          duration-500
+          ${imageLoaded
+                                                ? "opacity-100"
+                                                : "opacity-0"
+                                            }
+        `}
                                     />
+
+
                                 </>
+
 
                             )}
 
+
                         </div>
 
-                        <div className="mt-6 flex flex-wrap gap-4">
+                        <div className="flex flex-wrap gap-3 mt-5">
+
 
                             {(product.images?.length
                                 ? product.images
                                 : [product.image]
                             ).map((img, index) => (
+
 
                                 <button
                                     key={index}
@@ -538,69 +578,122 @@ ${product?.desc}
                                         setSelectedImage(img);
                                         setSelectedMedia("image");
                                     }}
-                                    className={`group overflow-hidden rounded-2xl border-2 bg-white p-1 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${selectedMedia === "image" &&
-                                        selectedImage === img
-                                        ? "border-slate-900"
-                                        : "border-slate-200"
-                                        }`}
+                                    className={`
+        w-20 
+        h-20 
+        rounded-xl 
+        overflow-hidden 
+        border-2
+        transition-all
+        duration-300
+
+        ${selectedMedia === "image" &&
+                                            selectedImage === img
+                                            ? "border-[#1D293E] shadow-[0_5px_15px_rgba(123,30,58,0.25)]"
+                                            : "border-[#1D293E] hover:border-[#1D293E]"
+                                        }
+      `}
                                 >
+
 
                                     <Image
                                         src={img}
-                                        alt={`Product Image ${index + 1}`}
+                                        alt=""
                                         width={80}
                                         height={80}
-                                        className="h-20 w-20 rounded-xl object-cover transition-transform duration-300 group-hover:scale-105"
+                                        className="w-full h-full object-cover"
                                     />
+
 
                                 </button>
 
+
                             ))}
+
+
+
+
 
                             {/* Video */}
                             {product.video && (
 
+
                                 <button
-                                    onClick={() => setSelectedMedia("video")}
-                                    className={`group flex h-[90px] w-[90px] flex-col items-center justify-center rounded-2xl border-2 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${selectedMedia === "video"
-                                        ? "border-slate-900"
-                                        : "border-slate-200"
-                                        }`}
+                                    onClick={() =>
+                                        setSelectedMedia("video")
+                                    }
+                                    className={`
+        w-20 
+        h-20 
+        rounded-xl 
+        border-2 
+        flex 
+        flex-col 
+        items-center 
+        justify-center
+        transition-all
+
+        ${selectedMedia === "video"
+                                            ? "border-[#1D293E] bg-[#FFF5F7] text-[#1D293E]"
+                                            : "border-[#1D293E] hover:bg-[#FFF5F7]"
+                                        }
+      `}
                                 >
 
-                                    <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 transition-all duration-300 group-hover:bg-slate-900 group-hover:text-white">
-                                        <FaPlay size={16} />
-                                    </div>
 
-                                    <span className="text-xs font-medium text-slate-600">
+                                    <FaPlay size={20} />
+
+
+                                    <span className="text-xs mt-1">
                                         Video
                                     </span>
 
+
                                 </button>
+
 
                             )}
 
+
+
+
+
                             {/* PDF */}
                             {product.pdf && (
+
 
                                 <a
                                     href={product.pdf}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="group flex h-[90px] w-[90px] flex-col items-center justify-center rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+                                    className="
+        w-20 
+        h-20 
+        rounded-xl 
+        border 
+        border-[#1D293E]
+        flex 
+        flex-col 
+        items-center 
+        justify-center
+        text-[#1D293E]
+        hover:bg-[#FFF5F7]
+        transition-all
+      "
                                 >
 
-                                    <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-lg transition-all duration-300 group-hover:bg-slate-900 group-hover:text-white">
-                                        📄
-                                    </div>
+                                    📄
 
-                                    <span className="text-xs font-medium text-slate-600">
+                                    <span className="text-xs text-[#6B4A54]">
                                         PDF
                                     </span>
 
+
                                 </a>
 
+
                             )}
+
 
                         </div>
 
@@ -612,151 +705,276 @@ ${product?.desc}
 
                         <div className="flex justify-between items-start gap-4 relative">
 
-                            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-slate-900">
+
+                            {/* Product Title */}
+                            <h1 className="
+    text-2xl 
+    sm:text-3xl 
+    md:text-4xl 
+    lg:text-5xl 
+    font-bold 
+    leading-tight 
+    text-[#2D1B21]
+  ">
                                 {product.title}
                             </h1>
 
+
+
+
+                            {/* Share */}
                             <div
                                 ref={shareRef}
                                 className="relative"
                             >
 
+
                                 <button
                                     onClick={handleNativeShare}
-                                    className="w-12 h-12 rounded-full border bg-white shadow flex items-center justify-center hover:bg-slate-100"
+                                    className="
+        w-12 
+        h-12 
+        rounded-full 
+        border 
+        border-[#1D293E]
+        bg-white 
+        text-[#1D293E]
+        shadow-md
+        flex 
+        items-center 
+        justify-center 
+        hover:bg-[#FFF5F7]
+        hover:scale-105
+        transition-all
+      "
                                 >
+
                                     <FaShareAlt size={18} />
+
                                 </button>
+
+
+
 
                                 {showShare && (
 
-                                    <div className="absolute right-0 top-14 w-56 bg-white rounded-xl shadow-xl border p-2 z-50">
 
+                                    <div className="
+        absolute 
+        right-0 
+        top-14 
+        w-56 
+        bg-white 
+        rounded-xl 
+        shadow-[0_20px_50px_rgba(123,30,58,0.15)]
+        border 
+        border-[#1D293E]
+        p-2 
+        z-50
+      ">
+
+
+                                        {/* Copy Link */}
                                         <button
                                             onClick={handleCopy}
-                                            className="w-full text-left px-3 py-2 hover:bg-slate-100 rounded flex items-center gap-2"
+                                            className="
+            w-full 
+            text-left 
+            px-3 
+            py-2 
+            rounded
+            flex 
+            items-center 
+            gap-2
+            text-[#6B4A54]
+            hover:bg-[#FFF5F7]
+            hover:text-[#1D293E]
+            transition
+          "
                                         >
+
                                             <FaLink />
                                             Copy Link
+
                                         </button>
 
+
+
+
+
+                                        {/* WhatsApp */}
                                         <button
                                             onClick={handleWhatsapp}
-                                            className="w-full text-left px-3 py-2 hover:bg-slate-100 rounded flex items-center gap-2"
+                                            className="
+            w-full 
+            text-left 
+            px-3 
+            py-2 
+            rounded
+            flex 
+            items-center 
+            gap-2
+            text-[#6B4A54]
+            hover:bg-[#FFF5F7]
+            hover:text-[#1D293E]
+            transition
+          "
                                         >
+
                                             <FaWhatsapp className="text-green-600" />
                                             WhatsApp
+
                                         </button>
 
+
+
+
+
+                                        {/* Facebook */}
                                         <button
                                             onClick={handleFacebook}
-                                            className="w-full text-left px-3 py-2 hover:bg-slate-100 rounded flex items-center gap-2"
+                                            className="
+            w-full 
+            text-left 
+            px-3 
+            py-2 
+            rounded
+            flex 
+            items-center 
+            gap-2
+            text-[#6B4A54]
+            hover:bg-[#FFF5F7]
+            hover:text-[#1D293E]
+            transition
+          "
                                         >
+
                                             <FaFacebook className="text-blue-600" />
                                             Facebook
+
                                         </button>
 
+
+
+
+
+                                        {/* Instagram */}
                                         <button
                                             onClick={handleInstagram}
-                                            className="w-full text-left px-3 py-2 hover:bg-slate-100 rounded flex items-center gap-2"
+                                            className="
+            w-full 
+            text-left 
+            px-3 
+            py-2 
+            rounded
+            flex 
+            items-center 
+            gap-2
+            text-[#6B4A54]
+            hover:bg-[#FFF5F7]
+            hover:text-[#1D293E]
+            transition
+          "
                                         >
+
                                             <FaInstagram className="text-pink-600" />
                                             Instagram
+
                                         </button>
+
 
                                     </div>
 
+
                                 )}
 
-                            </div>
-
-                        </div>
-
-                        <div className="mt-6 rounded-[30px] border border-slate-200 bg-white p-6 md:mt-8 md:p-8 shadow-xl">
-
-                            <h3 className="text-2xl font-bold tracking-tight text-slate-900">
-                                Product Specifications
-                            </h3>
-
-                            <div className="mt-4 h-1 w-20 rounded-full bg-slate-300" />
-
-                            <div className="mt-8 grid gap-4 sm:grid-cols-2">
-
-                                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-                                    <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                                        Brand
-                                    </p>
-                                    <p className="mt-2 text-lg font-bold text-slate-900">
-                                        {product.brand || "N/A"}
-                                    </p>
-                                </div>
-
-                                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-                                    <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                                        Model
-                                    </p>
-                                    <p className="mt-2 text-lg font-bold text-slate-900">
-                                        {product.model || "N/A"}
-                                    </p>
-                                </div>
-
-                                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-                                    <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                                        Instrument
-                                    </p>
-                                    <p className="mt-2 text-lg font-bold text-slate-900">
-                                        {product.instrument || "N/A"}
-                                    </p>
-                                </div>
-
-                                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-                                    <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                                        Capacity
-                                    </p>
-                                    <p className="mt-2 text-lg font-bold text-slate-900">
-                                        {product.capacity || "N/A"}
-                                    </p>
-                                </div>
-
-                                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-                                    <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                                        Throughput
-                                    </p>
-                                    <p className="mt-2 text-lg font-bold text-slate-900">
-                                        {product.throughput || "N/A"}
-                                    </p>
-                                </div>
-
-                                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-                                    <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                                        Usage
-                                    </p>
-                                    <p className="mt-2 text-lg font-bold text-slate-900">
-                                        {product.usage || "N/A"}
-                                    </p>
-                                </div>
-
-                                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-                                    <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                                        Automation
-                                    </p>
-                                    <p className="mt-2 text-lg font-bold text-slate-900">
-                                        {product.automation || "N/A"}
-                                    </p>
-                                </div>
-
-                                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-                                    <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                                        Availability
-                                    </p>
-                                    <p className="mt-2 text-lg font-bold text-slate-900">
-                                        {product.availability || "N/A"}
-                                    </p>
-                                </div>
 
                             </div>
 
+
                         </div>
+
+                        <div className="
+  mt-6 
+  md:mt-8 
+  bg-white 
+  p-5 
+  sm:p-6 
+  md:p-8 
+  rounded-[24px] 
+  md:rounded-[30px]
+  border border-[#1D293E]
+  shadow-[0_20px_60px_rgba(123,30,58,0.10)]
+  space-y-4
+">
+
+
+                            <p className="text-[#6B4A54]">
+                                <b className="text-[#2D1B21]">
+                                    Brand:
+                                </b>{" "}
+                                {product.brand || "N/A"}
+                            </p>
+
+
+                            <p className="text-[#6B4A54]">
+                                <b className="text-[#2D1B21]">
+                                    Model:
+                                </b>{" "}
+                                {product.model || "N/A"}
+                            </p>
+
+
+                            <p className="text-[#6B4A54]">
+                                <b className="text-[#2D1B21]">
+                                    Instrument:
+                                </b>{" "}
+                                {product.instrument || "N/A"}
+                            </p>
+
+
+                            <p className="text-[#6B4A54]">
+                                <b className="text-[#2D1B21]">
+                                    Capacity:
+                                </b>{" "}
+                                {product.capacity || "N/A"}
+                            </p>
+
+
+                            <p className="text-[#6B4A54]">
+                                <b className="text-[#2D1B21]">
+                                    Throughput:
+                                </b>{" "}
+                                {product.throughput || "N/A"}
+                            </p>
+
+
+                            <p className="text-[#6B4A54]">
+                                <b className="text-[#2D1B21]">
+                                    Usage:
+                                </b>{" "}
+                                {product.usage || "N/A"}
+                            </p>
+
+
+                            <p className="text-[#6B4A54]">
+                                <b className="text-[#2D1B21]">
+                                    Automation:
+                                </b>{" "}
+                                {product.automation || "N/A"}
+                            </p>
+
+
+                            <p className="text-[#6B4A54]">
+                                <b className="text-[#2D1B21]">
+                                    Availability:
+                                </b>{" "}
+                                {product.availability || "N/A"}
+                            </p>
+
+
+                        </div>
+
                     </div>
 
                 </div>
@@ -768,31 +986,46 @@ ${product?.desc}
 
                         {/* Quote Form */}
 
-                        <div className="h-fit rounded-[32px] border border-slate-200 bg-white p-6 md:p-8 shadow-2xl lg:sticky lg:top-24">
+                        <div className="
+  bg-white 
+  rounded-[24px] 
+  md:rounded-[32px]
+  p-5 
+  sm:p-6 
+  md:p-8
+  border border-[#1D293E]
+  shadow-[0_20px_60px_rgba(123,30,58,0.10)]
+  h-fit 
+  lg:sticky 
+  lg:top-24
+">
 
-                            {/* Heading */}
-                            <h2 className="text-3xl font-bold tracking-tight text-slate-900">
-                                Request a Quote
+
+                            <h2 className="text-2xl md:text-3xl font-bold mb-2 text-[#2D1B21]">
+                                Request A Quote
                             </h2>
 
-                            <div className="mt-4 h-1 w-20 rounded-full bg-slate-300" />
 
-                            {/* Product */}
-                            <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                                <p className="text-sm font-medium text-slate-500">
-                                    Product
-                                </p>
 
-                                <p className="mt-2 text-lg font-bold text-slate-900">
+                            <p className="text-[#6B4A54] mb-8">
+
+                                Product:
+
+                                <span className="font-semibold ml-2 text-[#1D293E]">
                                     {product.title}
-                                </p>
-                            </div>
+                                </span>
 
-                            {/* Form */}
+                            </p>
+
+
+
+
                             <form
                                 onSubmit={handleSubmit}
-                                className="mt-8 space-y-5"
+                                className="space-y-5"
                             >
+
+
 
                                 <input
                                     type="text"
@@ -804,8 +1037,29 @@ ${product?.desc}
                                             name: e.target.value,
                                         })
                                     }
-                                    className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-300 focus:border-slate-700 focus:bg-white focus:ring-4 focus:ring-slate-200"
+                                    className="
+        w-full
+        bg-[#FFF8F9]
+        border border-[#1D293E]
+        rounded-xl
+        md:rounded-2xl
+        px-4
+        md:px-5
+        py-3
+        md:py-4
+        text-[#2D1B21]
+        placeholder:text-[#9A7B84]
+        outline-none
+        focus:border-[#1D293E]
+        focus:ring-2
+        focus:ring-[#1D293E]/20
+        transition
+      "
                                 />
+
+
+
+
 
                                 <input
                                     type="email"
@@ -817,8 +1071,29 @@ ${product?.desc}
                                             email: e.target.value,
                                         })
                                     }
-                                    className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-300 focus:border-slate-700 focus:bg-white focus:ring-4 focus:ring-slate-200"
+                                    className="
+        w-full
+        bg-[#FFF8F9]
+        border border-[#1D293E]
+        rounded-xl
+        md:rounded-2xl
+        px-4
+        md:px-5
+        py-3
+        md:py-4
+        text-[#2D1B21]
+        placeholder:text-[#9A7B84]
+        outline-none
+        focus:border-[#1D293E]
+        focus:ring-2
+        focus:ring-[#1D293E]/20
+        transition
+      "
                                 />
+
+
+
+
 
                                 <input
                                     type="tel"
@@ -828,229 +1103,487 @@ ${product?.desc}
                                     onChange={(e) =>
                                         setForm({
                                             ...form,
-                                            phone: e.target.value.replace(/\D/g, ""),
+                                            phone:
+                                                e.target.value.replace(
+                                                    /\D/g,
+                                                    ""
+                                                ),
                                         })
                                     }
-                                    className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-300 focus:border-slate-700 focus:bg-white focus:ring-4 focus:ring-slate-200"
+                                    className="
+        w-full
+        bg-[#FFF8F9]
+        border border-[#1D293E]
+        rounded-2xl
+        px-5
+        py-4
+        text-[#2D1B21]
+        placeholder:text-[#9A7B84]
+        outline-none
+        focus:border-[#1D293E]
+        focus:ring-2
+        focus:ring-[#1D293E]/20
+        transition
+      "
                                 />
+
+
+
+
 
                                 <button
                                     type="submit"
                                     disabled={submitting}
-                                    className="w-full rounded-2xl bg-slate-900 px-6 py-4 font-semibold text-white shadow-lg transition-all duration-300 hover:bg-slate-800 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-60"
+                                    className="
+        w-full
+        bg-gradient-to-r
+        from-[#1D293E]
+        to-[#A63D5A]
+        text-white
+        py-4
+        rounded-2xl
+        font-semibold
+        shadow-md
+        hover:from-[#1D293E]
+        hover:to-[#1D293E]
+        transition-all
+        duration-300
+        disabled:opacity-70
+      "
                                 >
-                                    {submitting ? "Submitting..." : "Get Quote"}
+
+                                    {submitting
+                                        ? "Submitting..."
+                                        : "Get Quote"}
+
                                 </button>
+
+
 
                             </form>
 
+
                         </div>
+
                         {/* Description */}
 
-                        <div className="bg-white rounded-[24px] md:rounded-[32px] p-5 sm:p-6 md:p-10 shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
+                        <div className="
+  bg-white 
+  rounded-[24px]
+  md:rounded-[32px]
+  p-5 
+  sm:p-6 
+  md:p-10
+  border border-[#1D293E]
+  shadow-[0_20px_60px_rgba(123,30,58,0.10)]
+">
 
-                            <h3 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 text-slate-900">
+
+                            {/* Description Title */}
+                            <h3 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 text-[#2D1B21]">
                                 Product Description
                             </h3>
 
-                            <p className="text-slate-600 leading-7 md:leading-9 text-base md:text-lg">
+
+
+
+                            {/* Description */}
+                            <p className="text-[#6B4A54] leading-7 md:leading-9 text-base md:text-lg">
+
                                 {product.desc ||
                                     product.description ||
                                     "No description available."}
+
                             </p>
 
+
+
+
+
                             {/* Specifications Table */}
+                            <div className="mt-10 overflow-x-auto">
 
-                            <div className="mt-10 overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-xl">
+                                <table className="w-full border border-[#1D293E]">
 
-                                <div className="overflow-x-auto">
 
-                                    <table className="w-full">
+                                    <tbody>
 
-                                        <tbody>
 
-                                            {[
-                                                { label: "Brand", value: product.brand || "N/A" },
-                                                { label: "Model", value: product.model || "N/A" },
-                                                { label: "Usage", value: product.usage || "N/A" },
-                                                { label: "Automation", value: product.automation || "N/A" },
-                                                { label: "Capacity", value: product.capacity || "N/A" },
-                                                { label: "Throughput", value: product.throughput || "N/A" },
-                                            ].map((row, index) => (
+                                        {[
+                                            ["Brand", product.brand],
+                                            ["Model", product.model],
+                                            ["Usage", product.usage],
+                                            ["Automation", product.automation],
+                                            ["Capacity", product.capacity],
+                                            ["Throughput", product.throughput],
+                                        ].map(([label, value], index) => (
 
-                                                <tr
-                                                    key={row.label}
-                                                    className={`transition-colors duration-300 hover:bg-slate-50 ${index !== 5 ? "border-b border-slate-200" : ""
-                                                        }`}
-                                                >
+                                            <tr key={index}>
 
-                                                    <td className="w-[35%] bg-slate-50 px-6 py-5 text-sm font-semibold uppercase tracking-wider text-slate-600">
-                                                        {row.label}
-                                                    </td>
 
-                                                    <td className="px-6 py-5 text-base font-medium text-slate-900">
-                                                        {row.value}
-                                                    </td>
+                                                <td className="
+              border 
+              border-[#1D293E]
+              p-3
+              font-semibold
+              text-[#2D1B21]
+              bg-[#FFF8F9]
+            ">
+                                                    {label}
+                                                </td>
 
-                                                </tr>
 
-                                            ))}
+                                                <td className="
+              border 
+              border-[#1D293E]
+              p-3
+              text-[#6B4A54]
+            ">
+                                                    {value || "N/A"}
+                                                </td>
 
-                                        </tbody>
 
-                                    </table>
+                                            </tr>
 
-                                </div>
+                                        ))}
+
+
+                                    </tbody>
+
+
+                                </table>
+
 
                             </div>
 
+
+
+
+
                             {/* SEO Content */}
+                            <div className="mt-12">
 
-                            <div className="mt-14 space-y-8">
 
-                                {[
-                                    {
-                                        title: `Why Choose Raj Biosis in ${cityName}?`,
-                                        content: `Raj Biosis is a trusted supplier and distributor of ${product.title} in ${cityName}. We provide high-quality biomedical and laboratory equipment for hospitals, pathology laboratories, diagnostic centres, research institutions, and healthcare facilities with dependable technical support and professional service.`,
-                                    },
-                                    {
-                                        title: `Features of ${product.title}`,
-                                        content: `${product.title} delivers reliable performance, accurate test results, easy operation, long service life, and efficient workflow. It is designed to meet the demanding requirements of modern hospitals and diagnostic laboratories.`,
-                                    },
-                                    {
-                                        title: `Applications of ${product.title}`,
-                                        content: `${product.title} is widely used in hospitals, pathology laboratories, diagnostic centres, blood banks, research institutes, medical colleges, and healthcare facilities where precision and reliability are essential.`,
-                                    },
-                                    {
-                                        title: `${product.title} Supplier in ${cityName}`,
-                                        content: `Raj Biosis supplies ${product.title} in ${cityName} with professional consultation, installation support, operator guidance, and dependable after-sales service for healthcare organizations.`,
-                                    },
-                                    {
-                                        title: `${product.title} Dealer in ${cityName}`,
-                                        content: `As a trusted dealer of ${product.title} in ${cityName}, we provide biomedical equipment, laboratory instruments, diagnostic analyzers, and healthcare devices to hospitals, pathology labs, and research centres.`,
-                                    },
-                                    {
-                                        title: `${product.title} Distributor in ${cityName}`,
-                                        content: `Looking for a reliable distributor of ${product.title} in ${cityName}? We offer competitive pricing, fast delivery, installation assistance, preventive maintenance, and technical guidance.`,
-                                    },
-                                    {
-                                        title: `Buy ${product.title} in ${cityName}`,
-                                        content: `Purchase high-quality ${product.title} in ${cityName} at competitive prices. Contact Raj Biosis for the latest quotation, product availability, and expert recommendations.`,
-                                    },
-                                    {
-                                        title: `${product.title} Price in ${cityName}`,
-                                        content: `The price of ${product.title} depends on the brand, model, specifications, and optional features. Contact our experts for the latest pricing, availability, and delivery schedule.`,
-                                    },
-                                ].map((section, index) => (
+                                <h3 className="text-2xl font-bold mb-4 text-[#2D1B21]">
+                                    Why Choose Raj Biosis in {cityName}?
+                                </h3>
 
-                                    <div
-                                        key={index}
-                                        className="group rounded-[30px] border border-slate-200 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-xl"
-                                    >
 
-                                        {/* Heading */}
-                                        <h3 className="text-2xl font-bold tracking-tight text-slate-900">
-                                            {section.title}
-                                        </h3>
+                                <p className="text-[#6B4A54] leading-8">
 
-                                        {/* Divider */}
-                                        <div className="mt-4 mb-6 h-1 w-16 rounded-full bg-slate-300 transition-all duration-300 group-hover:w-24 group-hover:bg-slate-700" />
+                                    Raj Biosis is a trusted supplier and
+                                    distributor of {product.title} in {cityName}.
+                                    We provide high-quality biomedical and laboratory
+                                    equipment for hospitals, pathology laboratories,
+                                    diagnostic centres and healthcare facilities.
 
-                                        {/* Content */}
-                                        <p className="leading-8 text-slate-600">
-                                            {section.content}
-                                        </p>
+                                </p>
 
-                                    </div>
 
-                                ))}
 
+
+                                <div className="mt-8">
+
+
+                                    <h3 className="text-2xl font-bold mb-4 text-[#2D1B21]">
+                                        Features of {product.title}
+                                    </h3>
+
+
+                                    <p className="text-[#6B4A54] leading-8">
+
+                                        {product.title} offers reliable performance,
+                                        accurate results, easy operation, long service
+                                        life and efficient workflow for laboratories
+                                        and hospitals.
+
+                                    </p>
+
+
+                                </div>
+
+
+
+
+                                <div className="mt-8">
+
+
+                                    <h3 className="text-2xl font-bold mb-4 text-[#2D1B21]">
+                                        Applications of {product.title}
+                                    </h3>
+
+                                    <p className="text-[#6B4A54] leading-8">
+                                        Widely used in hospitals, pathology labs,
+                                        diagnostic centres, blood banks, research
+                                        institutes and healthcare facilities.
+                                    </p>
+
+
+                                </div>
+
+
+
+
+                                <div className="mt-8">
+
+
+                                    <h3 className="text-2xl font-bold mb-4 text-[#2D1B21]">
+                                        {product.title} Supplier in {cityName}
+                                    </h3>
+
+
+                                    <p className="text-[#6B4A54] leading-8">
+                                        Raj Biosis supplies {product.title}
+                                        in {cityName} with technical support,
+                                        installation assistance and customer service
+                                        for hospitals and laboratories.
+                                    </p>
+
+
+                                </div>
+
+
+
+
+                                <div className="mt-8">
+
+
+                                    <h3 className="text-2xl font-bold mb-4 text-[#2D1B21]">
+                                        {product.title} Dealer in {cityName}
+                                    </h3>
+
+
+                                    <p className="text-[#6B4A54] leading-8">
+                                        Raj Biosis is a trusted dealer of
+                                        {product.title} in {cityName}. We supply
+                                        biomedical equipment, laboratory instruments,
+                                        diagnostic analyzers and healthcare devices
+                                        to hospitals, pathology labs and research centres.
+                                    </p>
+
+
+                                </div>
+
+
+
+
+
+                                <div className="mt-8">
+
+
+                                    <h3 className="text-2xl font-bold mb-4 text-[#2D1B21]">
+                                        {product.title} Distributor in {cityName}
+                                    </h3>
+
+
+                                    <p className="text-[#6B4A54] leading-8">
+                                        Looking for a reliable distributor of
+                                        {product.title} in {cityName}? We provide
+                                        installation support, product guidance,
+                                        maintenance assistance and fast delivery.
+                                    </p>
+
+
+                                </div>
+
+
+
+
+
+                                <div className="mt-8">
+
+
+                                    <h3 className="text-2xl font-bold mb-4 text-[#2D1B21]">
+                                        Buy {product.title} in {cityName}
+                                    </h3>
+
+
+                                    <p className="text-[#6B4A54] leading-8">
+                                        Buy high quality {product.title} in
+                                        {cityName} at competitive prices.
+                                        Contact Raj Biosis for the
+                                        latest quotation and product availability.
+                                    </p>
+
+
+                                </div>
+
+
+
+
+
+                                <div className="mt-8">
+
+
+                                    <h3 className="text-2xl font-bold mb-4 text-[#2D1B21]">
+                                        {product.title} Price in {cityName}
+                                    </h3>
+
+
+                                    <p className="text-[#6B4A54] leading-8">
+                                        The price of {product.title} depends on
+                                        brand, model, specifications and features.
+                                        Contact our team for the latest pricing,
+                                        availability and delivery details.
+                                    </p>
+
+
+                                </div>
                             </div>
 
                             {/* FAQ Section */}
 
-                            <div className="mt-14">
+                            <div className="mt-12">
 
-                                {/* Heading */}
-                                <div className="text-center">
 
-                                    <span className="inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-5 py-2 text-sm font-semibold text-slate-700">
-                                        Frequently Asked Questions
-                                    </span>
+                                <h3 className="text-2xl font-bold mb-6 text-[#2D1B21]">
+                                    Frequently Asked Questions
+                                </h3>
 
-                                    <h3 className="mt-6 text-4xl font-bold tracking-tight text-slate-900">
-                                        Frequently Asked Questions
-                                    </h3>
 
-                                    <div className="mx-auto mt-5 h-1 w-20 rounded-full bg-slate-300" />
+
+                                <div className="space-y-8">
+
+
+
+                                    <div>
+                                        <h4 className="font-semibold text-lg text-[#1D293E]">
+                                            What is {product.title} used for in {cityName}?
+                                        </h4>
+
+                                        <p className="text-[#6B4A54] mt-2">
+                                            {product.title} is commonly used in hospitals,
+                                            pathology laboratories and diagnostic centres.
+                                        </p>
+                                    </div>
+
+
+
+
+
+                                    <div>
+                                        <h4 className="font-semibold text-lg text-[#1D293E]">
+                                            What is the price of {product.title} in {cityName}?
+                                        </h4>
+
+                                        <p className="text-[#6B4A54] mt-2">
+                                            Pricing depends on specifications,
+                                            brand and model. Contact us for a quote.
+                                        </p>
+                                    </div>
+
+
+
+
+
+                                    <div>
+                                        <h4 className="font-semibold text-lg text-[#1D293E]">
+                                            Are you an authorized supplier of {product.title}?
+                                        </h4>
+
+                                        <p className="text-[#6B4A54] mt-2">
+                                            We supply genuine biomedical and
+                                            laboratory equipment from trusted brands.
+                                        </p>
+                                    </div>
+
+
+
+
+
+                                    <div>
+                                        <h4 className="font-semibold text-lg text-[#1D293E]">
+                                            Can hospitals in {cityName} order this product?
+                                        </h4>
+
+                                        <p className="text-[#6B4A54] mt-2">
+                                            Yes, hospitals, pathology laboratories,
+                                            diagnostic centres and healthcare facilities
+                                            can order this product.
+                                        </p>
+                                    </div>
+
+
+
+
+
+                                    <div>
+                                        <h4 className="font-semibold text-lg text-[#1D293E]">
+                                            Do you provide installation support?
+                                        </h4>
+
+                                        <p className="text-[#6B4A54] mt-2">
+                                            Yes, installation and technical support
+                                            are available depending on the product.
+                                        </p>
+                                    </div>
+
+
+
+
+
+                                    <div>
+                                        <h4 className="font-semibold text-lg text-[#1D293E]">
+                                            Can I request a quotation?
+                                        </h4>
+
+                                        <p className="text-[#6B4A54] mt-2">
+                                            Yes, you can submit the enquiry form on
+                                            this page to receive pricing and product
+                                            information.
+                                        </p>
+                                    </div>
+
+
+
+
+
+                                    <div>
+                                        <h4 className="font-semibold text-lg text-[#1D293E]">
+                                            Do you provide warranty?
+                                        </h4>
+
+                                        <p className="text-[#6B4A54] mt-2">
+                                            Warranty depends on the manufacturer and
+                                            product model.
+                                        </p>
+                                    </div>
+
+
+
+
+
+                                    <div>
+                                        <h4 className="font-semibold text-lg text-[#1D293E]">
+                                            Do you deliver across India?
+                                        </h4>
+
+                                        <p className="text-[#6B4A54] mt-2">
+                                            Yes, we supply products across India with
+                                            safe packaging and logistics support.
+                                        </p>
+                                    </div>
+
+
+
+
+
+                                    <div>
+                                        <h4 className="font-semibold text-lg text-[#1D293E]">
+                                            How can I contact Raj Biosis?
+                                        </h4>
+
+                                        <p className="text-[#6B4A54] mt-2">
+                                            You can fill out the enquiry form or
+                                            contact our team directly for product
+                                            details and quotations.
+                                        </p>
+                                    </div>
+
+
 
                                 </div>
 
-                                {/* FAQ Cards */}
-                                <div className="mt-12 space-y-6">
-
-                                    {[
-                                        {
-                                            question: `What is ${product.title} used for in ${cityName}?`,
-                                            answer: `${product.title} is widely used in hospitals, pathology laboratories, diagnostic centres, and healthcare facilities for accurate and reliable diagnostic applications.`,
-                                        },
-                                        {
-                                            question: `What is the price of ${product.title} in ${cityName}?`,
-                                            answer: `The price depends on the model, brand, and specifications. Contact us to receive the latest quotation and availability.`,
-                                        },
-                                        {
-                                            question: `Are you an authorized supplier of ${product.title}?`,
-                                            answer: `Yes. We supply genuine biomedical and laboratory equipment from trusted manufacturers with reliable technical support.`,
-                                        },
-                                        {
-                                            question: `Can hospitals in ${cityName} order this product?`,
-                                            answer: `Yes. Hospitals, pathology laboratories, diagnostic centres, research institutes, and healthcare facilities can purchase this product from us.`,
-                                        },
-                                        {
-                                            question: "Do you provide installation support?",
-                                            answer: `Yes. Installation assistance, operator guidance, and technical support are available depending on the product and project requirements.`,
-                                        },
-                                        {
-                                            question: "Can I request a quotation?",
-                                            answer: `Absolutely. Submit the enquiry form on this page and our team will provide pricing, product details, and expert recommendations.`,
-                                        },
-                                        {
-                                            question: "Do you provide warranty?",
-                                            answer: `Warranty coverage depends on the manufacturer and the selected product model. Our team will explain the warranty terms before purchase.`,
-                                        },
-                                        {
-                                            question: "Do you deliver across India?",
-                                            answer: `Yes. We supply biomedical equipment across India with secure packaging, reliable logistics, and timely delivery.`,
-                                        },
-                                        {
-                                            question: "How can I contact Raj Biosis?",
-                                            answer: `You can submit the enquiry form, call our support team, or email us for product information, quotations, and technical assistance.`,
-                                        },
-                                    ].map((faq, index) => (
-
-                                        <div
-                                            key={index}
-                                            className="group rounded-[28px] border border-slate-200 bg-white p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-xl"
-                                        >
-
-                                            {/* Question */}
-                                            <h4 className="text-xl font-bold tracking-tight text-slate-900">
-                                                {faq.question}
-                                            </h4>
-
-                                            {/* Divider */}
-                                            <div className="mt-4 mb-5 h-1 w-14 rounded-full bg-slate-300 transition-all duration-300 group-hover:w-20 group-hover:bg-slate-700" />
-
-                                            {/* Answer */}
-                                            <p className="leading-8 text-slate-600">
-                                                {faq.answer}
-                                            </p>
-
-                                        </div>
-
-                                    ))}
-
-                                </div>
 
                             </div>
 
@@ -1061,6 +1594,175 @@ ${product?.desc}
                 </div>
 
             </div>
+
+            {/* Hidden Brochure Template for PDF Generation */}
+            <div
+                ref={brochureRef}
+                style={{
+                    display: "none",
+                    width: "800px",
+                    padding: "40px",
+                    fontFamily: "system-ui, -apple-system, sans-serif",
+                    color: "#2D1B21",
+                    background: "#ffffff",
+                    boxSizing: "border-box",
+                }}
+            >
+                {/* Header */}
+                <div style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    borderBottom: "3px solid #1D293E",
+                    paddingBottom: "20px",
+                    marginBottom: "30px"
+                }}>
+                    {/* Logo & Name */}
+                    <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
+                        <img src="/logo.png" style={{ height: "65px", width: "auto", objectFit: "contain" }} />
+                        <div>
+                            <h1 style={{ margin: "0", fontSize: "28px", color: "#1D293E", fontWeight: "800", letterSpacing: "-0.5px" }}>
+                                RajBiosis Private Limited
+                            </h1>
+                            <p style={{ margin: "2px 0 0 0", fontSize: "12px", color: "#6B4A54", fontWeight: "600", textTransform: "uppercase", letterSpacing: "1px" }}>
+                                Trusted Biomedical Systems
+                            </p>
+                        </div>
+                    </div>
+                    {/* Contact Details */}
+                    <div style={{ textAlign: "right", fontSize: "12px", lineHeight: "1.6", color: "#6B4A54" }}>
+                        <p style={{ margin: "0", fontWeight: "700", color: "#1D293E", fontSize: "14px" }}>www.radioimmunoassay.in</p>
+                        <p style={{ margin: "0" }}>Email: {contactData.email}</p>
+                        <div style={{ margin: "0" }}>
+                            {contactData.phone.split(/[\n,]+/).map((num, i) => (
+                                <span key={i} style={{ display: "block" }}>Mob: {num.trim()}</span>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Product Title */}
+                <h2 style={{ fontSize: "26px", color: "#2D1B21", margin: "0 0 25px 0", textAlign: "center", fontWeight: "800", textTransform: "uppercase" }}>
+                    {product.title}
+                </h2>
+
+                {/* Main Layout Grid */}
+                <div style={{ display: "flex", gap: "30px", marginBottom: "35px" }}>
+                    {/* Left Column: Image */}
+                    <div style={{
+                        flex: "1.2",
+                        border: "1px solid #1D293E",
+                        borderRadius: "16px",
+                        padding: "20px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        height: "320px",
+                        backgroundColor: "#FFF8F9"
+                    }}>
+                        <img
+                            src={brochureImage || "/placeholder.jpg"}
+                            style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }}
+                        />
+                    </div>
+
+                    {/* Right Column: Specs */}
+                    <div style={{ flex: "1", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                        <div style={{ backgroundColor: "#FFF8F9", border: "1px solid #1D293E", borderRadius: "16px", padding: "20px", height: "100%", boxSizing: "border-box" }}>
+                            <h3 style={{ margin: "0 0 15px 0", color: "#1D293E", fontSize: "18px", fontWeight: "700", borderBottom: "1px solid #1D293E", paddingBottom: "8px" }}>
+                                Specifications
+                            </h3>
+                            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                                <p style={{ margin: "0", fontSize: "14px", color: "#6B4A54" }}>
+                                    <strong style={{ color: "#2D1B21" }}>Brand:</strong> {product.brand || "Raj Biosis"}
+                                </p>
+                                <p style={{ margin: "0", fontSize: "14px", color: "#6B4A54" }}>
+                                    <strong style={{ color: "#2D1B21" }}>Model:</strong> {product.model || "N/A"}
+                                </p>
+                                {product.instrument && (
+                                    <p style={{ margin: "0", fontSize: "14px", color: "#6B4A54" }}>
+                                        <strong style={{ color: "#2D1B21" }}>Instrument:</strong> {product.instrument}
+                                    </p>
+                                )}
+                                {product.category && (
+                                    <p style={{ margin: "0", fontSize: "14px", color: "#6B4A54" }}>
+                                        <strong style={{ color: "#2D1B21" }}>Category:</strong> {product.category}
+                                    </p>
+                                )}
+                                {product.subCategory && (
+                                    <p style={{ margin: "0", fontSize: "14px", color: "#6B4A54" }}>
+                                        <strong style={{ color: "#2D1B21" }}>Subcategory:</strong> {product.subCategory}
+                                    </p>
+                                )}
+                                 {product.capacity && (
+                                    <p style={{ margin: "0", fontSize: "14px", color: "#6B4A54" }}>
+                                        <strong style={{ color: "#2D1B21" }}>Capacity:</strong> {product.capacity}
+                                    </p>
+                                )}
+                                 {product.throughput && (
+                                    <p style={{ margin: "0", fontSize: "14px", color: "#6B4A54" }}>
+                                        <strong style={{ color: "#2D1B21" }}>Throughput:</strong> {product.throughput}
+                                    </p>
+                                )}
+                                 {product.usage && (
+                                    <p style={{ margin: "0", fontSize: "14px", color: "#6B4A54" }}>
+                                        <strong style={{ color: "#2D1B21" }}>Usage:</strong> {product.usage}
+                                    </p>
+                                )}
+                                 {product.automation && (
+                                    <p style={{ margin: "0", fontSize: "14px", color: "#6B4A54" }}>
+                                        <strong style={{ color: "#2D1B21" }}>Automation:</strong> {product.automation}
+                                    </p>
+                                )}
+                                 {product.availability && (
+                                    <p style={{ margin: "0", fontSize: "14px", color: "#6B4A54" }}>
+                                        <strong style={{ color: "#2D1B21" }}>Availability:</strong> {product.availability}
+                                    </p>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Description */}
+                <div style={{ marginBottom: "35px" }}>
+                    <h3 style={{ color: "#1D293E", fontSize: "18px", fontWeight: "700", borderLeft: "4px solid #1D293E", paddingLeft: "10px", margin: "0 0 12px 0" }}>
+                        Product Overview
+                    </h3>
+                    <p style={{ fontSize: "14px", lineHeight: "1.6", color: "#6B4A54", margin: "0", textAlign: "justify" }}>
+                        {product.description || product.desc || "Premium biomedical equipment designed for laboratories, hospitals, and diagnostic centers."}
+                    </p>
+                </div>
+
+                {/* Footer Details */}
+                <div style={{
+                    marginTop: "auto",
+                    borderTop: "1px solid #1D293E",
+                    paddingTop: "20px",
+                    textAlign: "center",
+                    fontSize: "11px",
+                    color: "#9A7B84",
+                    lineHeight: "1.5"
+                }}>
+                    <p style={{ margin: "0", fontWeight: "600" }}>Office Address: {contactData.address}</p>
+                    <p style={{ margin: "5px 0 0 0" }}>© 2026 Raj Biosis. All rights reserved. Premium diagnostics and biomedical solutions.</p>
+                </div>
+            </div>
+
+            {/* Sticky floating download brochure FAB */}
+            <button
+                onClick={handleDownloadBrochure}
+                disabled={downloading}
+                title="Download Brochure"
+                className="fixed bottom-24 right-8 z-40 flex h-14 items-center justify-center gap-2 rounded-full bg-[#1D293E] px-6 text-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:bg-[#1D293E] hover:shadow-xl active:scale-95 disabled:opacity-75 font-semibold"
+            >
+                {downloading ? (
+                    <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                ) : (
+                    <Download size={20} />
+                )}
+                <span>Download Brochure</span>
+            </button>
         </section>
     );
 }

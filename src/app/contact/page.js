@@ -84,7 +84,7 @@ export default function ContactPage() {
         collection(
           db,
           "websitesQueries",
-          "radioimmunoassayin",
+          "haemoglobinstripcom",
           "contactQueries"
         ),
         {
@@ -129,7 +129,7 @@ export default function ContactPage() {
           doc(
             db,
             "websites",
-            "radioimmunoassayin",
+            "haemoglobinstripcom",
             "districts",
             currentDistrict
           )
@@ -152,7 +152,7 @@ export default function ContactPage() {
           doc(
             db,
             "websites",
-            "radioimmunoassayin",
+            "haemoglobinstripcom",
             "pages",
             "contact"
           )
@@ -175,30 +175,29 @@ export default function ContactPage() {
 
 
 
-  const phone =
-    contactInfo.find(
-      (x) => x.label === "Phone Number"
-    )?.value || "";
+  const getContactField = (labels) => {
+    const found = contactInfo.find(
+      (x) => labels.some(l => x.label?.toLowerCase() === l.toLowerCase())
+    );
+    return found ? found.value : "";
+  };
 
-  const email =
-    contactInfo.find(
-      (x) => x.label === "Email Address"
-    )?.value || "";
-
-  const address =
-    contactInfo.find(
-      (x) => x.label === "Office Address"
-    )?.value || "";
-
-  const hours =
-    contactInfo.find(
-      (x) => x.label === "Working Hours"
-    )?.value || "";
+  const phone = getContactField(["phone", "phone number", "mobile", "mobile number"]);
+  const email = getContactField(["email", "email address"]);
+  const address = getContactField(["address", "office address", "address/office address"]);
+  const hours = getContactField(["working hours", "hours", "work hours"]);
 
   const dynamicAddress =
     districtData
       ? `${districtData.district}, ${districtData.state}, India`
       : address;
+
+  let phoneValues = [];
+  if (Array.isArray(phone)) {
+    phoneValues = phone.map(p => String(p).trim());
+  } else if (phone !== null && phone !== undefined && phone !== "") {
+    phoneValues = String(phone).split(/[\n,]+/).map(p => p.trim());
+  }
 
   const mapAddress = encodeURIComponent(
     dynamicAddress
@@ -241,7 +240,7 @@ export default function ContactPage() {
       {/* Banner */}
       <PageBanner
         title="Contact Us"
-        subtitle="Get in touch with Raj Biosis for premium diagnostic and biomedical solutions."
+        subtitle="Get in touch with  Raj Biosis for premium diagnostic and biomedical solutions."
       />
 
       {/* Contact Section */}
@@ -251,116 +250,108 @@ export default function ContactPage() {
           {/* Left Info */}
           <div>
 
-            {/* Badge */}
-            <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2 text-sm font-semibold text-slate-700 shadow-sm mb-6">
+            <span className="inline-block bg-sky-100 text-sky-700 px-5 py-2 rounded-full font-semibold mb-5">
               Contact Information
             </span>
 
-            {/* Heading */}
             <h2 className="section-title">
-              Let's Start a Conversation
+              Let’s Start a Conversation
             </h2>
 
-            {/* Description */}
             <p className="section-subtitle">
-              Reach out to us for healthcare consultation,
-              biomedical products, laboratory solutions,
-              and advanced diagnostic support.
+              Reach out to us for
+              healthcare consultation,
+              biomedical products, and
+              advanced diagnostic support.
             </p>
 
             {/* Contact Cards */}
-            <div className="mt-10 space-y-6">
+            <div className="space-y-6 mt-10">
 
-              {/* Phone */}
-              <div className="group flex items-start gap-5 rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
-
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-slate-200 bg-slate-100 text-slate-700 transition-all duration-300 group-hover:bg-slate-900 group-hover:text-white">
+              <div className="flex items-start gap-5 bg-slate-50 p-6 rounded-[28px] border border-slate-100">
+                <div className="w-14 h-14 rounded-2xl bg-sky-100 flex items-center justify-center text-sky-700 flex-shrink-0">
                   <Phone size={24} />
                 </div>
 
                 <div>
-                  <h4 className="text-lg font-bold text-slate-900">
+                  <h4 className="font-semibold text-lg">
                     Phone Number
                   </h4>
 
-                  <p className="mt-2 text-slate-600">
-                    {phone}
-                  </p>
+                  <div className="text-slate-600 mt-2 flex flex-col">
+                    {phoneValues.map((num, idx) => (
+                      <a key={idx} href={`tel:${num}`} className="hover:text-sky-700 transition">
+                        {num}
+                      </a>
+                    ))}
+                    {phoneValues.length === 0 && <p>N/A</p>}
+                  </div>
                 </div>
-
               </div>
 
-              {/* Email */}
-              <div className="group flex items-start gap-5 rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
-
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-slate-200 bg-slate-100 text-slate-700 transition-all duration-300 group-hover:bg-slate-900 group-hover:text-white">
+              <div className="flex items-start gap-5 bg-slate-50 p-6 rounded-[28px] border border-slate-100">
+                <div className="w-14 h-14 rounded-2xl bg-sky-100 flex items-center justify-center text-sky-700 flex-shrink-0">
                   <Mail size={24} />
                 </div>
 
                 <div>
-                  <h4 className="text-lg font-bold text-slate-900">
+                  <h4 className="font-semibold text-lg">
                     Email Address
                   </h4>
 
-                  <p className="mt-2 break-all text-slate-600">
-                    {email}
+                  <p className="text-slate-600 mt-2">
+                    <a href={`mailto:${email}`} className="hover:text-sky-700 transition">
+                      {email}
+                    </a>
                   </p>
                 </div>
-
               </div>
 
-              {/* Address */}
-              <div className="group flex items-start gap-5 rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
-
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-slate-200 bg-slate-100 text-slate-700 transition-all duration-300 group-hover:bg-slate-900 group-hover:text-white">
+              <div className="flex items-start gap-5 bg-slate-50 p-6 rounded-[28px] border border-slate-100">
+                <div className="w-14 h-14 rounded-2xl bg-sky-100 flex items-center justify-center text-sky-700 flex-shrink-0">
                   <MapPin size={24} />
                 </div>
 
                 <div>
-                  <h4 className="text-lg font-bold text-slate-900">
+                  <h4 className="font-semibold text-lg">
                     Office Address
                   </h4>
 
-                  <p className="mt-2 leading-7 text-slate-600">
+                  <p className="text-slate-600 mt-2">
                     {dynamicAddress}
                   </p>
                 </div>
-
               </div>
 
-              {/* Working Hours */}
-              <div className="group flex items-start gap-5 rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
-
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-slate-200 bg-slate-100 text-slate-700 transition-all duration-300 group-hover:bg-slate-900 group-hover:text-white">
+              <div className="flex items-start gap-5 bg-slate-50 p-6 rounded-[28px] border border-slate-100">
+                <div className="w-14 h-14 rounded-2xl bg-sky-100 flex items-center justify-center text-sky-700 flex-shrink-0">
                   <Clock3 size={24} />
                 </div>
 
                 <div>
-                  <h4 className="text-lg font-bold text-slate-900">
+                  <h4 className="font-semibold text-lg">
                     Working Hours
                   </h4>
 
-                  <p className="mt-2 text-slate-600">
+                  <p className="text-slate-600 mt-2">
                     {hours}
                   </p>
                 </div>
-
               </div>
 
             </div>
-
           </div>
 
           {/* Right Form */}
-          <div className="rounded-[40px] border border-slate-200 bg-white p-8 lg:p-10 shadow-2xl">
+          <div className="bg-white rounded-[40px] p-8 lg:p-10 shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
 
-            <h3 className="text-3xl font-bold tracking-tight text-slate-900">
-              Send Us a Message
+            <h3 className="text-3xl font-bold text-slate-900">
+              Send Us Message
             </h3>
 
-            <p className="mt-3 leading-7 text-slate-600">
-              Fill out the form below and our biomedical specialists
-              will get back to you as soon as possible.
+            <p className="text-slate-500 mt-3">
+              Fill out the form and our
+              team will contact you soon.
             </p>
 
             <form
@@ -374,7 +365,7 @@ export default function ContactPage() {
                 placeholder="Full Name"
                 value={form.name}
                 onChange={handleChange}
-                className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-300 focus:border-slate-700 focus:bg-white focus:ring-4 focus:ring-slate-200"
+                className="w-full border border-slate-200 rounded-2xl px-5 py-4 outline-none focus:border-sky-600"
               />
 
               <input
@@ -383,7 +374,7 @@ export default function ContactPage() {
                 placeholder="Email Address"
                 value={form.email}
                 onChange={handleChange}
-                className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-300 focus:border-slate-700 focus:bg-white focus:ring-4 focus:ring-slate-200"
+                className="w-full border border-slate-200 rounded-2xl px-5 py-4 outline-none focus:border-sky-600"
               />
 
               <input
@@ -398,7 +389,7 @@ export default function ContactPage() {
                     phone: e.target.value.replace(/\D/g, ""),
                   })
                 }
-                className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-300 focus:border-slate-700 focus:bg-white focus:ring-4 focus:ring-slate-200"
+                className="w-full border border-slate-200 rounded-2xl px-5 py-4 outline-none focus:border-sky-600"
               />
 
               <input
@@ -407,7 +398,7 @@ export default function ContactPage() {
                 placeholder="Subject"
                 value={form.subject}
                 onChange={handleChange}
-                className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-300 focus:border-slate-700 focus:bg-white focus:ring-4 focus:ring-slate-200"
+                className="w-full border border-slate-200 rounded-2xl px-5 py-4 outline-none focus:border-sky-600"
               />
 
               <textarea
@@ -416,19 +407,20 @@ export default function ContactPage() {
                 placeholder="Your Message"
                 value={form.message}
                 onChange={handleChange}
-                className="w-full resize-none rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-300 focus:border-slate-700 focus:bg-white focus:ring-4 focus:ring-slate-200"
+                className="w-full border border-slate-200 rounded-2xl px-5 py-4 outline-none focus:border-sky-600 resize-none"
               />
 
               <button
                 type="submit"
                 disabled={submitting}
-                className="inline-flex w-full items-center justify-center rounded-2xl bg-slate-900 px-6 py-4 font-semibold text-white shadow-lg transition-all duration-300 hover:bg-slate-800 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-60"
+                className="w-full bg-sky-700 text-white py-4 rounded-2xl font-semibold hover:bg-sky-800 transition"
               >
-                {submitting ? "Submitting..." : "Send Message"}
+                {submitting
+                  ? "Submitting..."
+                  : "Send Message"}
               </button>
 
             </form>
-
           </div>
         </div>
       </section>
