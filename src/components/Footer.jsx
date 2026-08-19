@@ -287,9 +287,9 @@ export default function Footer() {
 
             <div className="flex flex-col gap-3 text-slate-600">
               {categories.map((cat) => {
-                const catSlug = cat.replace(/\s+/g, "-").toLowerCase();
+                const catSlug = cat.toLowerCase().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-");
                 return (
-                  <Link key={cat} href={makeLink(`/items#${catSlug}`)} className="hover:text-sky-700 transition">
+                  <Link key={cat} href={`/category/${catSlug}`} className="hover:text-sky-700 transition">
                     {cat}
                   </Link>
                 );

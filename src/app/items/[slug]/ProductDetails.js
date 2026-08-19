@@ -31,10 +31,16 @@ const makeSlug = (text = "") =>
         .trim()
         .replace(/[^a-z0-9\s-]/g, "")
         .replace(/\s+/g, "-");
-export default function ProductDetails({ slug }) {
-    const [product, setProduct] = useState(null);
+import ProductInternalLinks from "@/components/ProductInternalLinks";
+
+export default function ProductDetails({ slug, initialProduct = null }) {
+    const [product, setProduct] = useState(initialProduct);
     const [imageLoaded, setImageLoaded] = useState(false);
-    const [selectedImage, setSelectedImage] = useState("");
+    const [selectedImage, setSelectedImage] = useState(
+        initialProduct?.images?.length > 0
+            ? initialProduct.images[0]
+            : initialProduct?.image || ""
+    );
     const [selectedMedia, setSelectedMedia] = useState("image");
     const [showShare, setShowShare] = useState(false);
 
@@ -1583,15 +1589,12 @@ ${product?.desc}
 
 
                                 </div>
-
-
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
+
+                <ProductInternalLinks product={product} />
 
             </div>
 
