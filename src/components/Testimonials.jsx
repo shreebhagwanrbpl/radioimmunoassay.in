@@ -7,21 +7,21 @@ export default function Testimonials() {
   const reviews = [
     {
       name: "Dr. Rajesh Kumar",
-      role: "Healthcare Specialist",
+      role: "Pathology Lab Owner",
       review:
-        "Raj Biosis has consistently delivered reliable diagnostic equipment with outstanding support.",
+        "The cell counter we bought from Raj Biosis works smoothly every day. Their technician came on the same day for machine setup.",
     },
     {
       name: "Amit Sharma",
-      role: "Lab Director",
+      role: "Diagnostic Center Manager",
       review:
-        "Professional service, premium products, and excellent biomedical consultation experience.",
+        "We regularly order RIA kits and biochemistry reagents here. The delivery is always fast and temperature controlled.",
     },
     {
       name: "Neha Verma",
-      role: "Research Head",
+      role: "Senior Lab Technician",
       review:
-        "Their healthcare solutions improved our laboratory efficiency significantly.",
+        "Clear guidance and easy operational training for our team. Great after-sales repair support whenever needed.",
     },
   ];
 
@@ -31,9 +31,9 @@ export default function Testimonials() {
 
         {/* Section Title */}
         <SectionTitle
-          badge="Testimonials"
-          title="What Our Clients Say"
-          description="Trusted by hospitals, laboratories, diagnostic centres, and healthcare professionals across India."
+          badge="Client Feedback"
+          title="What Lab Directors & Doctors Say"
+          description="Real feedback from pathology clinics, hospitals, and diagnostic testing centers using our equipment."
           center
         />
 

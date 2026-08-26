@@ -14,27 +14,27 @@ export default function WhyChooseUs() {
   const features = [
     {
       icon: <Microscope size={30} />,
-      title: "Advanced Technology",
+      title: "Proven Test Accuracy",
       description:
-        "Modern biomedical and diagnostic equipment for accurate healthcare solutions.",
+        "High quality testing instruments checked thoroughly to ensure clear and trustworthy results.",
     },
     {
       icon: <ShieldCheck size={30} />,
-      title: "Trusted Quality",
+      title: "Fair & Honest Pricing",
       description:
-        "Reliable and certified diagnostic systems with premium quality standards.",
+        "Direct supply without hidden costs so diagnostic centers get genuine value for money.",
     },
     {
       icon: <HeartPulse size={30} />,
-      title: "Healthcare Focused",
+      title: "Fast Local Delivery",
       description:
-        "Delivering healthcare-driven biomedical solutions with precision and care.",
+        "Quick dispatch of machines, RIA kits, and testing chemicals directly to your location.",
     },
     {
       icon: <BadgeCheck size={30} />,
-      title: "Expert Support",
+      title: "Direct Technical Help",
       description:
-        "Professional consultation and technical support for all medical needs.",
+        "Friendly local engineers ready to visit your lab for installation, training, and maintenance.",
     },
   ];
 
@@ -44,9 +44,9 @@ export default function WhyChooseUs() {
 
         {/* Section Title */}
         <SectionTitle
-          badge="Why Choose Us"
-          title="Trusted Biomedical Excellence"
-          description="We deliver innovative diagnostic technologies, advanced laboratory equipment, and dependable biomedical solutions backed by quality, expertise, and exceptional customer support."
+          badge="Why Work With Us"
+          title="Simple, Reliable & Honest Service"
+          description="We provide easy-to-use testing machines, fresh lab reagents, and fast technician support so your clinic runs without any downtime."
           center
         />
 
