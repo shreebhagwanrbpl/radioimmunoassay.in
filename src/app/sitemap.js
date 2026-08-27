@@ -1,18 +1,24 @@
-import { db } from "@/lib/firebase";
-import { collection, getDocs } from "firebase/firestore";
-import { fetchFullCatalog } from "@/lib/data-fetcher";
+import { fetchFullCatalog, fetchCategoryList, fetchBrandList } from "@/lib/data-fetcher-server";
+import { TOP_DISTRICTS } from "@/lib/constants";
+import { calculateSeoQualityScore } from "@/lib/seo-quality";
 
 export default async function sitemap() {
     const baseUrl = "https://radioimmunoassay.in";
     const urls = [];
 
-    // Static Pages
+    // 1. Core High-Priority Static Pages
     urls.push(
         {
             url: baseUrl,
             lastModified: new Date(),
             changeFrequency: "daily",
             priority: 1.0,
+        },
+        {
+            url: `${baseUrl}/items`,
+            lastModified: new Date(),
+            changeFrequency: "daily",
+            priority: 0.95,
         },
         {
             url: `${baseUrl}/about`,
@@ -31,80 +37,72 @@ export default async function sitemap() {
             lastModified: new Date(),
             changeFrequency: "monthly",
             priority: 0.7,
-        },
-        {
-            url: `${baseUrl}/items`,
-            lastModified: new Date(),
-            changeFrequency: "daily",
-            priority: 0.9,
         }
     );
 
     try {
-        // DISTRICTS
-        const districtSnap = await getDocs(
-            collection(db, "websites", "radioimmunoassayin", "districts")
-        );
-
-        const districts = districtSnap.docs.map((doc) => doc.data());
-
-        districts.forEach((district) => {
-            const slug = district.slug;
-            if (!slug) return;
-
-            urls.push(
-                {
-                    url: `${baseUrl}/${slug}`,
-                    lastModified: new Date(),
-                    changeFrequency: "daily",
-                    priority: 0.9,
-                },
-                {
-                    url: `${baseUrl}/${slug}/about`,
-                    lastModified: new Date(),
-                    changeFrequency: "weekly",
-                    priority: 0.7,
-                },
-                {
-                    url: `${baseUrl}/${slug}/services`,
-                    lastModified: new Date(),
-                    changeFrequency: "weekly",
-                    priority: 0.8,
-                },
-                {
-                    url: `${baseUrl}/${slug}/contact`,
-                    lastModified: new Date(),
-                    changeFrequency: "monthly",
-                    priority: 0.6,
-                },
-                {
-                    url: `${baseUrl}/${slug}/items`,
-                    lastModified: new Date(),
-                    changeFrequency: "daily",
-                    priority: 0.8,
-                }
-            );
+        // 2. High-Value Category Landing Pages
+        const categories = await fetchCategoryList();
+        categories.forEach((cat) => {
+            urls.push({
+                url: `${baseUrl}/category/${cat.slug}`,
+                lastModified: new Date(),
+                changeFrequency: "weekly",
+                priority: 0.9,
+            });
         });
 
-        // PRODUCTS (Using full catalog)
+        // 3. Manufacturer Brand Pages
+        const brands = await fetchBrandList();
+        brands.forEach((brand) => {
+            urls.push({
+                url: `${baseUrl}/brand/${brand.slug}`,
+                lastModified: new Date(),
+                changeFrequency: "weekly",
+                priority: 0.85,
+            });
+        });
+
+        // 4. District Location Landing Hubs (Legitimate Location Value)
+        TOP_DISTRICTS.forEach((district) => {
+            urls.push({
+                url: `${baseUrl}/${district.slug}`,
+                lastModified: new Date(),
+                changeFrequency: "weekly",
+                priority: 0.85,
+            });
+        });
+
+        // 5. Authoritative Product Pages (Filtered by Quality Gate)
         const products = await fetchFullCatalog();
 
         products.forEach((product) => {
             if (!product.slug) return;
 
-            // Main Product URL
-            urls.push({
-                url: `${baseUrl}/items/${product.slug}`,
-                lastModified: new Date(),
-                changeFrequency: "weekly",
-                priority: 0.9,
+            const canonicalUrl = `${baseUrl}/items/${product.slug}`;
+            const qualityEval = calculateSeoQualityScore({
+                title: product.title || "",
+                description: product.description || product.desc || "",
+                canonical: canonicalUrl,
+                contentLength: (product.description || "").length + 200,
+                hasImage: Boolean(product.image || product.images?.length),
+                imageAlt: product.title || "",
+                hasSchema: true,
+                hasInternalLinks: true,
             });
 
-
+            if (qualityEval.shouldIncludeInSitemap) {
+                urls.push({
+                    url: canonicalUrl,
+                    lastModified: new Date(),
+                    changeFrequency: "weekly",
+                    priority: 0.9,
+                });
+            }
         });
     } catch (error) {
         console.error("Sitemap Generation Error:", error);
     }
 
     return urls;
-}
+}

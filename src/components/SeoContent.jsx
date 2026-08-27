@@ -37,34 +37,34 @@ export default function SeoContent({ city = "" }) {
         "mainEntity": [
             {
                 "@type": "Question",
-                "name": `Do you supply biomedical equipment in ${location}?`,
+                "name": `Can you supply laboratory equipment in ${location}?`,
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": `Yes. Raj Biosis is a premier supplier of CBC Machines, Hematology Analyzers, Biochemistry Analyzers, ELISA Readers and diagnostic equipment in ${location} and across all major districts.`
+                    "text": `Yes. Raj Biosis supplies CBC machines, hematology systems, biochemistry analyzers, ELISA readers, and testing kits across ${location} and nearby areas.`
                 }
             },
             {
                 "@type": "Question",
-                "name": "Which laboratory instruments do you provide?",
+                "name": "What kind of lab machines and supplies do you offer?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "We offer 3-Part and 5-Part Hematology Analyzers, Fully & Semi Automated Biochemistry Analyzers, Radioimmunoassay Reagents, Urine Analyzers, and clinical laboratory consumables."
+                    "text": "We offer 3-part and 5-part hematology machines, biochemistry units, RIA kits, urine strip readers, and everyday clinical lab consumables."
                 }
             },
             {
                 "@type": "Question",
-                "name": "Do you provide installation and technical support?",
+                "name": "Do your technicians help with machine setup and staff training?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Yes. Our expert field engineers perform full on-site installation, machine calibration, operator staff training, and preventive maintenance."
+                    "text": "Yes. Our local field engineers handle complete machine setup, testing calibration, staff operational training, and ongoing AMC repairs."
                 }
             },
             {
                 "@type": "Question",
-                "name": "Who can purchase biomedical equipment from Raj Biosis?",
+                "name": "Who can order machines and reagents from Raj Biosis?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Hospitals, pathology labs, diagnostic centers, medical colleges, research institutes, and healthcare clinics of all scales."
+                    "text": "Pathology laboratories, diagnostic centers, hospital testing units, clinics, and research institutions across India."
                 }
             }
         ]
@@ -85,11 +85,11 @@ export default function SeoContent({ city = "" }) {
                 <div className="max-w-4xl mx-auto text-center">
 
                     <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2 text-sm font-semibold text-slate-700 shadow-sm">
-                        Biomedical & Laboratory Equipment Hub
+                        Pathology & Diagnostic Equipment Supplier
                     </span>
 
                     <h2 className="mt-6 text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900">
-                        Biomedical Equipment Supplier in{" "}
+                        Laboratory & Diagnostic Machine Supplier in{" "}
                         <span className="text-teal-600">
                             {location}
                         </span>
@@ -106,40 +106,40 @@ export default function SeoContent({ city = "" }) {
                     <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm hover:shadow-md transition-all duration-300">
                         <h3 className="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2">
                             <Building className="text-teal-600" size={22} />
-                            <span>Pathology & Hospital Equipment Supplier</span>
+                            <span>Reliable Diagnostic Machine Supplies</span>
                         </h3>
                         <p className="text-slate-600 leading-relaxed text-base">
-                            <strong className="text-slate-900">Raj Biosis</strong> is a trusted supplier of biomedical and laboratory equipment in <strong>{location}</strong>. We provide CBC Machines, Hematology Analyzers, Biochemistry Analyzers, Urine Analyzers, ELISA Readers and diagnostic instruments for hospitals, pathology laboratories and healthcare facilities.
+                            <strong className="text-slate-900">Raj Biosis</strong> delivers reliable diagnostic machines and pathology tools across <strong>{location}</strong>. We supply cell counters, biochemistry analyzers, RIA kits, and urine readers to help clinics produce accurate test reports.
                         </p>
                     </div>
 
                     <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm hover:shadow-md transition-all duration-300">
                         <h3 className="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2">
                             <Building className="text-teal-600" size={22} />
-                            <span>Precision & Clinical Calibration</span>
+                            <span>Accurate Testing & Quality Calibration</span>
                         </h3>
                         <p className="text-slate-600 leading-relaxed text-base">
-                            Our mission is to deliver reliable, high-quality laboratory equipment to healthcare professionals across India. We work with hospitals, diagnostic centres, research laboratories, and medical institutions to provide advanced biomedical solutions that improve patient care and diagnostic accuracy.
+                            Our main focus is giving healthcare teams easy access to high precision lab machinery. We support hospitals and diagnostic centers with tested instruments that ensure consistent patient results.
                         </p>
                     </div>
 
                     <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm hover:shadow-md transition-all duration-300">
                         <h3 className="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2">
                             <Building className="text-teal-600" size={22} />
-                            <span>Installation & Technical AMC Support</span>
+                            <span>On-Site Installation & Repair Contracts</span>
                         </h3>
                         <p className="text-slate-600 leading-relaxed text-base">
-                            We provide installation assistance, product guidance, application training, preventive maintenance, and technical support for a wide range of laboratory instruments. Whether you are establishing a new diagnostic laboratory or upgrading your existing facility, our specialists help you choose the right biomedical equipment for your requirements.
+                            We offer full machine setup, staff operational guidance, routine preventive checkups, and quick engineer visits. Whether setting up a new lab or upgrading old tools, our team guides you at every step.
                         </p>
                     </div>
 
                     <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm hover:shadow-md transition-all duration-300">
                         <h3 className="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2">
                             <Building className="text-teal-600" size={22} />
-                            <span>District-wide Delivery Network</span>
+                            <span>Fast Regional Supply Network</span>
                         </h3>
                         <p className="text-slate-600 leading-relaxed text-base">
-                            Raj Biosis supplies biomedical equipment across multiple districts and cities, helping healthcare providers enhance laboratory productivity, testing efficiency and diagnostic excellence through dependable healthcare technologies.
+                            Raj Biosis ships equipment and temperature-controlled reagents directly to laboratories across districts, helping medical teams keep testing uninterrupted.
                         </p>
                     </div>
 
@@ -150,10 +150,10 @@ export default function SeoContent({ city = "" }) {
                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-white/10 pb-6">
                         <div>
                             <span className="text-teal-400 font-bold text-xs uppercase tracking-wider">Local Coverage</span>
-                            <h3 className="text-2xl font-bold text-white mt-1">Biomedical Equipment Supply by District</h3>
+                            <h3 className="text-2xl font-bold text-white mt-1">Local Lab Equipment Delivery by District</h3>
                         </div>
                         <span className="px-4 py-1.5 rounded-full text-xs font-semibold bg-white/10 text-slate-300 border border-white/10">
-                            Fast Local Dispatch
+                            Direct Shipping
                         </span>
                     </div>
 
@@ -181,11 +181,11 @@ export default function SeoContent({ city = "" }) {
                     <div className="text-center max-w-2xl mx-auto">
 
                         <span className="inline-flex items-center rounded-full border border-slate-200 bg-white px-5 py-2 text-sm font-semibold text-slate-700 shadow-sm">
-                            Frequently Asked Questions
+                            Common Questions
                         </span>
 
                         <h2 className="mt-6 text-3xl font-bold text-slate-900">
-                            Got Questions? We Have Answers.
+                            Quick Answers to Common Queries
                         </h2>
 
                         <div className="mx-auto mt-4 h-1 w-20 rounded-full bg-teal-500" />
@@ -196,41 +196,41 @@ export default function SeoContent({ city = "" }) {
 
                         <div className="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm hover:shadow-md transition-all duration-300">
                             <h3 className="text-xl font-semibold text-slate-900">
-                                Do you supply biomedical equipment across India & in {location}?
+                                Can you supply laboratory equipment in {location}?
                             </h3>
 
                             <p className="mt-3 text-slate-600 leading-relaxed text-sm">
-                                Yes. We supply biomedical and laboratory equipment across multiple districts and cities throughout India, serving hospitals, laboratories, research centres and healthcare institutions.
+                                Yes. Raj Biosis supplies CBC machines, hematology systems, biochemistry analyzers, ELISA readers, and testing kits across {location} and nearby areas.
                             </p>
                         </div>
 
                         <div className="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm hover:shadow-md transition-all duration-300">
                             <h3 className="text-xl font-semibold text-slate-900">
-                                Which laboratory instruments do you provide?
+                                What kind of lab machines and supplies do you offer?
                             </h3>
 
                             <p className="mt-3 text-slate-600 leading-relaxed text-sm">
-                                We offer CBC Machines, Hematology Analyzers, Biochemistry Analyzers, ELISA Readers, Urine Analyzers and a comprehensive range of diagnostic laboratory equipment.
+                                We offer 3-part and 5-part hematology machines, biochemistry units, RIA kits, urine strip readers, and everyday clinical lab consumables.
                             </p>
                         </div>
 
                         <div className="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm hover:shadow-md transition-all duration-300">
                             <h3 className="text-xl font-semibold text-slate-900">
-                                Do you provide installation and technical support?
+                                Do your technicians help with machine setup and staff training?
                             </h3>
 
                             <p className="mt-3 text-slate-600 leading-relaxed text-sm">
-                                Yes. We provide installation assistance, application guidance, operator training and technical support depending on the equipment and project requirements.
+                                Yes. Our local field engineers handle complete machine setup, testing calibration, staff operational training, and ongoing AMC repairs.
                             </p>
                         </div>
 
                         <div className="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm hover:shadow-md transition-all duration-300">
                             <h3 className="text-xl font-semibold text-slate-900">
-                                Who can purchase biomedical equipment?
+                                Who can order machines and reagents from Raj Biosis?
                             </h3>
 
                             <p className="mt-3 text-slate-600 leading-relaxed text-sm">
-                                Our products are suitable for hospitals, pathology laboratories, diagnostic centres, medical colleges, research institutions and healthcare organizations of all sizes.
+                                Pathology laboratories, diagnostic centers, hospital testing units, clinics, and research institutions across India.
                             </p>
                         </div>
 

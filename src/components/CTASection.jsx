@@ -66,19 +66,18 @@ export default function CTASection({ city }) {
             <div>
 
               <span className="inline-flex items-center px-5 py-2 rounded-full bg-white/10 border border-white/20 text-white text-sm font-semibold backdrop-blur-sm mb-6">
-                Get In Touch
+                Need Help Choosing?
               </span>
 
               <h2 className="text-4xl lg:text-6xl font-bold leading-tight text-white">
-                Need Premium
+                Need Practical
                 <br />
-                Biomedical Solutions?
+                Lab Equipment?
               </h2>
 
               <p className="mt-6 text-slate-300 text-lg leading-8 max-w-xl">
-                Discover innovative diagnostic systems, laboratory equipment,
-                hospital solutions, and trusted biomedical technologies designed
-                to support modern healthcare with reliability and precision.
+                Find the right testing instruments, RIA chemicals, and technical setup
+                services for your diagnostic facility without hassle.
               </p>
 
             </div>
@@ -93,13 +92,12 @@ export default function CTASection({ city }) {
                 </div>
 
                 <h3 className="text-2xl font-bold text-slate-900">
-                  Let's Talk
+                  Speak With Us
                 </h3>
 
                 <p className="mt-4 text-slate-600 leading-7">
-                  Speak with our biomedical specialists for expert consultation,
-                  equipment recommendations, installation support, and after-sales
-                  assistance tailored to your healthcare facility.
+                  Get direct advice on equipment models, price details, installation steps,
+                  and service plans suited to your daily test volume.
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4 mt-8">
@@ -109,7 +107,7 @@ export default function CTASection({ city }) {
                     className="flex-1"
                   >
                     <button className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-slate-900 px-6 py-4 font-semibold text-white shadow-lg transition-all duration-300 hover:bg-slate-800 hover:shadow-xl">
-                      Contact Us
+                      Send Message
                       <ArrowRight size={18} />
                     </button>
                   </Link>
@@ -118,7 +116,7 @@ export default function CTASection({ city }) {
                     href="tel:+919876543210"
                     className="inline-flex items-center justify-center rounded-2xl border border-slate-300 bg-white px-6 py-4 font-semibold text-slate-800 transition-all duration-300 hover:bg-slate-100 hover:border-slate-400"
                   >
-                    Call Now
+                    Call Directly
                   </a>
 
                 </div>

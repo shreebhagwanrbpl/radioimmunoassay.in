@@ -63,43 +63,43 @@ export default function HeroSection({ city }) {
 
   const slides = [
     {
-      badge: "Trusted Biomedical Systems",
+      badge: "Reliable Medical Testing Tools",
       badgeIcon: ShieldCheck,
-      title: heroData.title || "Advanced Diagnostic & Biomedical Equipment",
+      title: heroData.title || "Quality Diagnostic Machines & Lab Equipment",
       description:
         heroData.description ||
-        "Empowering diagnostic centers, pathology labs, and hospitals with state-of-the-art CBC Machines, Hematology, Biochemistry Analyzers, and ELISA Readers.",
+        "We supply easy-to-use blood test machines, biochemistry analyzers, RIA kits, and pathology tools for medical labs and hospitals.",
       visualType: "hematology",
       badgeColor: "bg-teal-50 border-teal-200 text-teal-700",
-      btn1: heroData.button1Text || "Explore Catalogue",
+      btn1: heroData.button1Text || "View Products",
       btn1Link: makeLink("/items"),
-      btn2: heroData.button2Text || "Contact Us",
+      btn2: heroData.button2Text || "Get in Touch",
       btn2Link: makeLink("/contact"),
     },
     {
-      badge: "Radioimmunoassay & Reagents",
+      badge: "RIA Kits & Testing Supplies",
       badgeIcon: FlaskConical,
-      title: "High-Precision Clinical Diagnostic Reagents",
+      title: "Clean & Accurate Clinical Laboratory Reagents",
       description:
-        "Comprehensive inventory of radioimmunoassay kits, clinical reagents, lab consumables, and immunoassay instruments designed for exact clinical results.",
+        "Get fresh radioimmunoassay kits, testing liquids, and essential laboratory supplies delivered directly to your diagnostic center with temperature control.",
       visualType: "reagents",
       badgeColor: "bg-blue-50 border-blue-200 text-blue-700",
-      btn1: "Browse Products",
+      btn1: "See All Supplies",
       btn1Link: makeLink("/items"),
-      btn2: "Request Quotation",
+      btn2: "Ask for Prices",
       btn2Link: makeLink("/contact"),
     },
     {
-      badge: "Turnkey Hospital Solutions",
+      badge: "Full Lab Setup & Repair",
       badgeIcon: Award,
-      title: "Complete Pathology & Laboratory Setup",
+      title: "Simple Lab Setup & Fast Technician Assistance",
       description:
-        "End-to-end guidance, equipment selection, professional installation, staff operator training, and 24/7 technical support for diagnostic centers.",
+        "From picking the right instruments to on-site machine setup, staff training, and quick repair visits, we handle everything for your clinic.",
       visualType: "turnkey",
       badgeColor: "bg-indigo-50 border-indigo-200 text-indigo-700",
-      btn1: "Explore Services",
+      btn1: "Our Services",
       btn1Link: makeLink("/services"),
-      btn2: "Book Consultation",
+      btn2: "Talk to Specialist",
       btn2Link: makeLink("/contact"),
     },
   ];
@@ -195,7 +195,7 @@ export default function HeroSection({ city }) {
                   {activeSlide.description}
                   {city && (
                     <span className="text-slate-800 font-semibold ml-1">
-                      Serving hospitals & diagnostic laboratories across {city}.
+                      Supporting pathology centers and healthcare teams in {city}.
                     </span>
                   )}
                 </p>
@@ -223,15 +223,15 @@ export default function HeroSection({ city }) {
             <div className="grid grid-cols-3 gap-6 pt-8 border-t border-slate-200">
               <div className="border-l-4 border-teal-500 pl-4">
                 <div className="text-3xl font-extrabold text-slate-900">10+</div>
-                <div className="text-xs sm:text-sm text-slate-500 font-semibold mt-0.5">Years Experience</div>
+                <div className="text-xs sm:text-sm text-slate-500 font-semibold mt-0.5">Years Helping Labs</div>
               </div>
               <div className="border-l-4 border-blue-500 pl-4">
                 <div className="text-3xl font-extrabold text-slate-900">500+</div>
-                <div className="text-xs sm:text-sm text-slate-500 font-semibold mt-0.5">Products Delivered</div>
+                <div className="text-xs sm:text-sm text-slate-500 font-semibold mt-0.5">Machines Installed</div>
               </div>
               <div className="border-l-4 border-indigo-500 pl-4">
                 <div className="text-3xl font-extrabold text-slate-900">100%</div>
-                <div className="text-xs sm:text-sm text-slate-500 font-semibold mt-0.5">Quality Assurance</div>
+                <div className="text-xs sm:text-sm text-slate-500 font-semibold mt-0.5">Tested Quality</div>
               </div>
             </div>
           </div>
@@ -257,15 +257,15 @@ export default function HeroSection({ city }) {
                         </div>
                         <div>
                           <h4 className="font-extrabold text-slate-900 text-lg">
-                            Hematology Analyzer
+                            Blood Testing Machine
                           </h4>
                           <p className="text-xs text-slate-500 font-medium">
-                            3-Part & 5-Part Differential
+                            Automatic 3-Part & 5-Part Cell Counters
                           </p>
                         </div>
                       </div>
                       <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-teal-100 text-teal-800 border border-teal-200">
-                        Live Scanner
+                        Tested Systems
                       </span>
                     </div>
 
@@ -275,10 +275,10 @@ export default function HeroSection({ city }) {
                       <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff10_1px,transparent_1px),linear-gradient(to_bottom,#ffffff10_1px,transparent_1px)] bg-[size:1.5rem_1.5rem]" />
                       
                       <div className="relative z-10 flex items-center justify-between text-xs text-teal-400 font-mono">
-                        <span>PULSE_READOUT: OPTIMAL</span>
+                        <span>READING_STATUS: READY</span>
                         <span className="flex items-center gap-1">
                           <span className="w-2 h-2 rounded-full bg-teal-400 animate-ping" />
-                          SAMPLING
+                          TESTING
                         </span>
                       </div>
 
@@ -291,8 +291,8 @@ export default function HeroSection({ city }) {
                       </div>
 
                       <div className="relative z-10 flex items-center justify-between text-[11px] text-slate-400 font-mono">
-                        <span>ACCURACY: 99.85%</span>
-                        <span>SPEED: 60 TESTS/HR</span>
+                        <span>ACCURACY: HIGH PRECISION</span>
+                        <span>SPEED: FAST RESULTS</span>
                       </div>
                     </div>
 
@@ -310,7 +310,7 @@ export default function HeroSection({ city }) {
 
                     <div className="flex items-center gap-2 text-xs text-slate-600 font-semibold pt-1">
                       <CheckCircle2 size={16} className="text-teal-600 shrink-0" />
-                      <span>Certified Manufacturer Warranty & On-site Calibration</span>
+                      <span>Includes On-site Setup, Testing, and Local Field Care</span>
                     </div>
                   </div>
                 )}
@@ -324,15 +324,15 @@ export default function HeroSection({ city }) {
                         </div>
                         <div>
                           <h4 className="font-extrabold text-slate-900 text-lg">
-                            Clinical Reagent Hub
+                            Lab Reagents & Kits
                           </h4>
                           <p className="text-xs text-slate-500 font-medium">
-                            RIA & Biochemistry Kits
+                            RIA & Chemical Testing Kits
                           </p>
                         </div>
                       </div>
                       <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-blue-100 text-blue-800 border border-blue-200">
-                        Pan-India Stock
+                        Fresh Stock
                       </span>
                     </div>
 
@@ -342,15 +342,15 @@ export default function HeroSection({ city }) {
                         <div className="flex items-center gap-2">
                           <Zap size={18} className="text-blue-600" />
                           <span className="text-xs font-extrabold text-slate-800 uppercase tracking-wider">
-                            Cold Chain Dispatch
+                            Safe Temperature Shipping
                           </span>
                         </div>
-                        <span className="text-xs font-bold text-blue-600">Active Batch</span>
+                        <span className="text-xs font-bold text-blue-600">Ready Supply</span>
                       </div>
 
                       <div className="space-y-2">
                         <div className="flex justify-between text-xs font-bold text-slate-700">
-                          <span>Immunoassay Sensitivity</span>
+                          <span>Testing Purity</span>
                           <span>99.9%</span>
                         </div>
                         <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
@@ -359,18 +359,18 @@ export default function HeroSection({ city }) {
                       </div>
 
                       <p className="text-xs text-slate-600 leading-relaxed pt-1">
-                        Formulated for precise radioimmunoassay & biochemistry diagnostic analyzers.
+                        Formulated for clear, dependable results in daily laboratory testing.
                       </p>
                     </div>
 
                     <div className="grid grid-cols-2 gap-3">
                       <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100">
-                        <span className="text-xs text-slate-500 font-semibold block">Temp Controlled</span>
-                        <span className="text-base font-extrabold text-slate-900">2°C to 8°C</span>
+                        <span className="text-xs text-slate-500 font-semibold block">Cold Storage</span>
+                        <span className="text-base font-extrabold text-slate-900">2°C to 8°C Safe</span>
                       </div>
                       <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100">
-                        <span className="text-xs text-slate-500 font-semibold block">Delivery Dispatch</span>
-                        <span className="text-base font-extrabold text-slate-900">Within 24 Hours</span>
+                        <span className="text-xs text-slate-500 font-semibold block">Quick Dispatch</span>
+                        <span className="text-base font-extrabold text-slate-900">24-Hour Shipping</span>
                       </div>
                     </div>
                   </div>
@@ -385,43 +385,43 @@ export default function HeroSection({ city }) {
                         </div>
                         <div>
                           <h4 className="font-extrabold text-slate-900 text-lg">
-                            Turnkey Lab Installation
+                            Full Lab Setup Service
                           </h4>
                           <p className="text-xs text-slate-500 font-medium">
-                            Setup, Calibration & AMC
+                            Machine Setup & Support
                           </p>
                         </div>
                       </div>
                       <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-indigo-100 text-indigo-800 border border-indigo-200">
-                        24/7 Service
+                        Quick Assistance
                       </span>
                     </div>
 
                     <div className="p-6 rounded-2xl bg-slate-900 text-white space-y-4 shadow-xl">
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-mono text-teal-400 uppercase tracking-widest">
-                          ENGINEER_HELPLINE
+                          DIRECT_HELPLINE
                         </span>
                         <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
                       </div>
 
                       <h5 className="text-xl font-extrabold text-white">
-                        Full Field Support & Operator Training
+                        Complete On-Site Training & Repair
                       </h5>
 
                       <p className="text-xs text-slate-300 leading-relaxed">
-                        Experienced biomedical engineers available across all districts for immediate troubleshooting and routine calibration.
+                        Our technicians come directly to your facility to help set up machines, train staff, and fix issues quickly.
                       </p>
                     </div>
 
                     <div className="grid grid-cols-2 gap-3">
                       <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100">
-                        <span className="text-xs text-slate-500 font-semibold block">Labs Configured</span>
-                        <span className="text-lg font-extrabold text-slate-900">150+ Setup</span>
+                        <span className="text-xs text-slate-500 font-semibold block">Path Labs Built</span>
+                        <span className="text-lg font-extrabold text-slate-900">150+ Labs</span>
                       </div>
                       <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100">
-                        <span className="text-xs text-slate-500 font-semibold block">Response Time</span>
-                        <span className="text-lg font-extrabold text-slate-900">&lt; 4 Hours</span>
+                        <span className="text-xs text-slate-500 font-semibold block">Help Response</span>
+                        <span className="text-lg font-extrabold text-slate-900">Same Day</span>
                       </div>
                     </div>
                   </div>

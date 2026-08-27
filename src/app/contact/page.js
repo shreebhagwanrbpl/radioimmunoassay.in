@@ -239,8 +239,8 @@ export default function ContactPage() {
     <>
       {/* Banner */}
       <PageBanner
-        title="Contact Us"
-        subtitle="Get in touch with  Raj Biosis for premium diagnostic and biomedical solutions."
+        title="Get In Touch"
+        subtitle="Contact Raj Biosis for laboratory equipment details, price quotes, and technical support."
       />
 
       {/* Contact Section */}
@@ -251,18 +251,15 @@ export default function ContactPage() {
           <div>
 
             <span className="inline-block bg-sky-100 text-sky-700 px-5 py-2 rounded-full font-semibold mb-5">
-              Contact Information
+              Direct Details
             </span>
 
             <h2 className="section-title">
-              Let’s Start a Conversation
+              We Are Here To Help
             </h2>
 
             <p className="section-subtitle">
-              Reach out to us for
-              healthcare consultation,
-              biomedical products, and
-              advanced diagnostic support.
+              Contact our team for machine specifications, reagent price quotes, or local technician assistance.
             </p>
 
             {/* Contact Cards */}
@@ -275,7 +272,7 @@ export default function ContactPage() {
 
                 <div>
                   <h4 className="font-semibold text-lg">
-                    Phone Number
+                    Phone Helpline
                   </h4>
 
                   <div className="text-slate-600 mt-2 flex flex-col">
@@ -296,7 +293,7 @@ export default function ContactPage() {
 
                 <div>
                   <h4 className="font-semibold text-lg">
-                    Email Address
+                    Email Support
                   </h4>
 
                   <p className="text-slate-600 mt-2">
@@ -314,7 +311,7 @@ export default function ContactPage() {
 
                 <div>
                   <h4 className="font-semibold text-lg">
-                    Office Address
+                    Office Location
                   </h4>
 
                   <p className="text-slate-600 mt-2">
@@ -330,7 +327,7 @@ export default function ContactPage() {
 
                 <div>
                   <h4 className="font-semibold text-lg">
-                    Working Hours
+                    Operating Hours
                   </h4>
 
                   <p className="text-slate-600 mt-2">
@@ -346,12 +343,11 @@ export default function ContactPage() {
           <div className="bg-white rounded-[40px] p-8 lg:p-10 shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
 
             <h3 className="text-3xl font-bold text-slate-900">
-              Send Us Message
+              Send Us a Message
             </h3>
 
             <p className="text-slate-500 mt-3">
-              Fill out the form and our
-              team will contact you soon.
+              Leave your contact details and message below. Our representative will respond quickly.
             </p>
 
             <form
@@ -362,7 +358,7 @@ export default function ContactPage() {
               <input
                 type="text"
                 name="name"
-                placeholder="Full Name"
+                placeholder="Your Full Name"
                 value={form.name}
                 onChange={handleChange}
                 className="w-full border border-slate-200 rounded-2xl px-5 py-4 outline-none focus:border-sky-600"
@@ -371,7 +367,7 @@ export default function ContactPage() {
               <input
                 type="email"
                 name="email"
-                placeholder="Email Address"
+                placeholder="Your Email Address"
                 value={form.email}
                 onChange={handleChange}
                 className="w-full border border-slate-200 rounded-2xl px-5 py-4 outline-none focus:border-sky-600"
@@ -380,7 +376,7 @@ export default function ContactPage() {
               <input
                 type="tel"
                 name="phone"
-                placeholder="Phone Number"
+                placeholder="Mobile Number"
                 maxLength={10}
                 value={form.phone}
                 onChange={(e) =>
@@ -395,7 +391,7 @@ export default function ContactPage() {
               <input
                 type="text"
                 name="subject"
-                placeholder="Subject"
+                placeholder="Topic / Query Subject"
                 value={form.subject}
                 onChange={handleChange}
                 className="w-full border border-slate-200 rounded-2xl px-5 py-4 outline-none focus:border-sky-600"
@@ -404,7 +400,7 @@ export default function ContactPage() {
               <textarea
                 rows={5}
                 name="message"
-                placeholder="Your Message"
+                placeholder="Tell us what machine or service you need..."
                 value={form.message}
                 onChange={handleChange}
                 className="w-full border border-slate-200 rounded-2xl px-5 py-4 outline-none focus:border-sky-600 resize-none"
@@ -416,8 +412,8 @@ export default function ContactPage() {
                 className="w-full bg-sky-700 text-white py-4 rounded-2xl font-semibold hover:bg-sky-800 transition"
               >
                 {submitting
-                  ? "Submitting..."
-                  : "Send Message"}
+                  ? "Sending..."
+                  : "Submit Inquiry"}
               </button>
 
             </form>

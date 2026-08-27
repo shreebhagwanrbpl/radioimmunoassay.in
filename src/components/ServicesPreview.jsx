@@ -15,27 +15,27 @@ export default function ServicesPreview() {
   const services = [
     {
       icon: <Microscope size={30} />,
-      title: "Diagnostic Equipment",
+      title: "Analyzer Supply",
       description:
-        "Advanced diagnostic systems designed for accurate and efficient healthcare testing.",
+        "Blood cell counters, biochemistry units, and urine testing machines delivered ready to test.",
     },
     {
       icon: <FlaskConical size={30} />,
-      title: "Laboratory Solutions",
+      title: "RIA & Lab Supplies",
       description:
-        "Reliable laboratory instruments and biomedical support for modern medical environments.",
+        "Radioimmunoassay kits, diluents, and clinical chemicals delivered in temperature-safe packaging.",
     },
     {
       icon: <ShieldCheck size={30} />,
-      title: "Maintenance Support",
+      title: "Machine Repairs & AMC",
       description:
-        "Professional technical support and maintenance for biomedical systems.",
+        "Regular calibration checkups and fast repair support to keep lab devices running smoothly.",
     },
     {
       icon: <Stethoscope size={30} />,
-      title: "Healthcare Consultation",
+      title: "New Lab Guidance",
       description:
-        "Expert guidance and consultation for healthcare and biomedical operations.",
+        "Practical help choosing machines, space planning, and training your lab staff.",
     },
   ];
 
@@ -45,9 +45,9 @@ export default function ServicesPreview() {
 
         {/* Section Title */}
         <SectionTitle
-          badge="Our Services"
-          title="Premium Diagnostic & Biomedical Services"
-          description="Providing advanced healthcare technologies, laboratory systems, and trusted biomedical solutions for hospitals, diagnostic centres, research laboratories, and healthcare institutions."
+          badge="Key Solutions"
+          title="Complete Services For Diagnostic Labs"
+          description="From machinery supply and testing chemicals to machine installation, staff guidance, and routine repairs."
           center
         />
 

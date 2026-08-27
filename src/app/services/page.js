@@ -32,39 +32,39 @@ export default function ServicesPage({ city = "" }) {
 
   const defaultServices = [
     {
-      title: "Biomedical & Diagnostic Equipment Sales",
-      desc: "Supplier of top-tier CBC Machines, 3-Part & 5-Part Hematology Analyzers, Semi & Fully Automated Biochemistry Analyzers, and ELISA Readers.",
-      features: ["Brand Warranty Included", "Pan-India Delivery", "Competitive Pricing"],
+      title: "Diagnostic Machine Supply",
+      desc: "Top quality CBC cell counters, 3-part and 5-part hematology analyzers, biochemistry units, and urine strip readers.",
+      features: ["Genuine Manufacturer Warranty", "Direct Location Shipping", "Fair Clear Prices"],
       icon: <Microscope size={30} />,
     },
     {
-      title: "Radioimmunoassay & Diagnostic Reagent Supply",
-      desc: "Reliable batch supply of high-sensitivity RIA kits, biochemistry reagents, hematology diluents, and clinical laboratory consumables.",
-      features: ["Certified Reagent Quality", "Temperature Controlled Dispatch", "Bulk Supply Discount"],
+      title: "RIA Kits & Testing Chemical Supply",
+      desc: "Fresh, temperature-safe radioimmunoassay kits, biochemistry reagents, diluents, and everyday lab supplies.",
+      features: ["Verified Kit Purity", "Temperature Safe Shipping", "Bulk Order Savings"],
       icon: <FlaskConical size={30} />,
     },
     {
       title: "On-Site Installation & Staff Training",
-      desc: "Certified service engineers to configure, install, and calibrate diagnostic instruments at your pathology lab or hospital with hands-on staff training.",
-      features: ["On-site Calibration", "Operator Certification", "User Manual & Guidelines"],
+      desc: "Our field technicians set up, calibrate, and test your diagnostic tools at your lab while teaching your staff simple operating steps.",
+      features: ["On-Site Calibration", "Staff Operation Guide", "Full Manual Provided"],
       icon: <Wrench size={30} />,
     },
     {
-      title: "Preventive Maintenance & AMC Services",
-      desc: "Comprehensive annual maintenance contracts (AMC) and routine calibration checks ensuring 100% uptime and test accuracy for your machines.",
-      features: ["Genuine Spare Parts", "Rapid Engineer Dispatch", "Scheduled Preventive Inspections"],
+      title: "Regular Maintenance & AMC Repair Contracts",
+      desc: "Routine preventive maintenance checkups and AMC repair contracts to ensure 100% machine uptime and clear test reports.",
+      features: ["Original Replacement Parts", "Fast Technician Visits", "Scheduled Maintenance Checks"],
       icon: <ShieldCheck size={30} />,
     },
     {
-      title: "Turnkey Laboratory & Hospital Setup",
-      desc: "Complete consultative assistance for setting up new pathology centers, selecting essential biomedical machinery, and lab workflow optimization.",
-      features: ["Budget Optimization", "Space & Power Guidance", "Regulatory Compliance Advice"],
+      title: "New Pathology & Clinic Setup",
+      desc: "Help choosing appropriate machines, arranging workflow space, and getting your new pathology center ready for daily testing.",
+      features: ["Budget Plan Advice", "Space & Power Guidance", "Setup Consultation"],
       icon: <Stethoscope size={30} />,
     },
     {
-      title: "24/7 Technical Support & Remote Troubleshooting",
-      desc: "Dedicated technical helpline and online support for quick resolution of instrument error codes, calibration adjustments, and software assistance.",
-      features: ["Immediate Remote Assistance", "Qualified Field Engineers", "Pan-District Helpline"],
+      title: "Direct Helpline & Quick Repair Assistance",
+      desc: "Friendly helpline and rapid remote support to guide your technicians through machine codes, calibration settings, and basic fixes.",
+      features: ["Quick Phone Guidance", "Skilled Field Technicians", "Pan-District Helpline"],
       icon: <Activity size={30} />,
     },
   ];
@@ -107,20 +107,20 @@ export default function ServicesPage({ city = "" }) {
 
   const serviceFaqs = [
     {
-      q: `What biomedical equipment do you install ${locationText}?`,
-      a: `We supply, install, and service CBC Machines, 3-Part and 5-Part Hematology Analyzers, Biochemistry Analyzers, ELISA Readers, Urine Analyzers, and clinical reagents for laboratories and hospitals.`,
+      q: `What diagnostic machines do you install ${locationText}?`,
+      a: `We supply and set up CBC cell counters, 3-part and 5-part hematology units, biochemistry analyzers, RIA kits, ELISA readers, and urine strip analyzers for clinics and hospitals.`,
     },
     {
-      q: "Do you provide Annual Maintenance Contracts (AMC)?",
-      a: "Yes! We offer flexible Annual Maintenance Contracts (AMC) and Comprehensive Maintenance Contracts (CMC) to ensure your laboratory machinery maintains peak precision with minimum downtime.",
+      q: "Do you offer Annual Maintenance Contracts (AMC) for machines?",
+      a: "Yes! We provide flexible AMC and repair plans so your laboratory machines run without unexpected breakdowns.",
     },
     {
-      q: "Are training sessions provided for lab technicians?",
-      a: "Absolutely. Our certified service engineers perform full on-site installation, calibration, and provide practical operational training for your laboratory technicians.",
+      q: "Do you train lab staff to operate the new machines?",
+      a: "Yes. Our technicians install the machine on-site, test accuracy, and provide step-by-step practical training for your lab staff.",
     },
     {
-      q: "How quickly can equipment or reagents be delivered?",
-      a: "We maintain ready stock of major analyzers and reagents, enabling fast dispatch across all districts within 24-48 hours.",
+      q: "How quickly can equipment and RIA kits be delivered?",
+      a: "We maintain ready stock of popular machines and reagents, enabling fast dispatch within 24 to 48 hours.",
     },
   ];
 
@@ -128,8 +128,8 @@ export default function ServicesPage({ city = "" }) {
     <>
       {/* Banner */}
       <PageBanner
-        title={`Biomedical & Diagnostic Services ${city ? `- ${city}` : ""}`}
-        subtitle={`Delivering trusted biomedical services, equipment supply, and technical solutions ${locationText}.`}
+        title={`Laboratory & Diagnostic Services ${city ? `- ${city}` : ""}`}
+        subtitle={`Supplying reliable lab machinery, testing chemicals, and on-site repair support ${locationText}.`}
       />
 
       {/* Services Grid */}
@@ -137,9 +137,9 @@ export default function ServicesPage({ city = "" }) {
         <div className="container-custom">
           {/* Section Title */}
           <SectionTitle
-            badge="What We Offer"
-            title={`Premium Biomedical Services ${locationText}`}
-            description="Innovative healthcare technologies, laboratory equipment supply, calibration, and maintenance solutions tailored for diagnostic centres and hospitals."
+            badge="What We Do"
+            title={`Complete Services for Medical Testing Labs ${locationText}`}
+            description="From machine delivery and fresh RIA kits to full installation, technician training, and fast repair visits."
             center
           />
 
@@ -202,7 +202,7 @@ export default function ServicesPage({ city = "" }) {
                     <div className="mt-8 pt-4 border-t border-slate-100">
                       <Link href={makeLink("/contact")}>
                         <button className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl border border-slate-200 bg-slate-50 group-hover:bg-slate-900 group-hover:text-white text-slate-800 text-sm font-semibold transition-all duration-300 cursor-pointer">
-                          <span>Request Quote</span>
+                          <span>Ask For Price</span>
                           <ArrowRight size={16} />
                         </button>
                       </Link>
@@ -218,9 +218,9 @@ export default function ServicesPage({ city = "" }) {
         <div className="container-custom">
           {/* Section Title */}
           <SectionTitle
-            badge="How We Work"
-            title="Streamlined Service Execution"
-            description="Our step-by-step approach ensures accurate product selection, flawless installation, and uncompromised technical support."
+            badge="Our Process"
+            title="Simple 4-Step Working Approach"
+            description="We help you select the right machine, deliver it safely, set it up on site, and care for it long term."
             center
             dark
           />
@@ -230,23 +230,23 @@ export default function ServicesPage({ city = "" }) {
             {[
               {
                 step: "01",
-                title: "Requirement Assessment",
-                desc: "Understanding your laboratory test volume and diagnostic needs to recommend optimum machinery.",
+                title: "Understanding Your Needs",
+                desc: "We review your daily test counts to recommend the most cost-effective machinery.",
               },
               {
                 step: "02",
-                title: "Product Supply & Testing",
-                desc: "Fast dispatch of genuine biomedical analyzers and reagents with pre-delivery quality verification.",
+                title: "Testing & Safe Delivery",
+                desc: "Pre-delivery inspection of analyzers and temperature-controlled shipping of reagents.",
               },
               {
                 step: "03",
-                title: "On-Site Setup & Training",
-                desc: "Field engineers install, calibrate the instrument, and train your laboratory staff on operation.",
+                title: "Setup & Staff Training",
+                desc: "Field engineers install instruments, test calibration, and train your staff on daily operation.",
               },
               {
                 step: "04",
-                title: "Ongoing Service & Support",
-                desc: "24/7 technical hotline, rapid engineer site visits, and scheduled preventive maintenance.",
+                title: "Ongoing Support & AMC",
+                desc: "Prompt phone help, quick field repair visits, and regular maintenance checks.",
               },
             ].map((item, index) => (
               <div
@@ -274,9 +274,9 @@ export default function ServicesPage({ city = "" }) {
       <section className="section-padding bg-slate-50">
         <div className="container-custom max-w-4xl">
           <SectionTitle
-            badge="Service FAQ"
-            title="Frequently Asked Questions"
-            description="Find quick answers regarding our service delivery, installation policies, and technical support."
+            badge="Common Questions"
+            title="Clear Answers About Our Services"
+            description="Learn how we handle machine delivery, technician visits, staff training, and maintenance contracts."
             center
           />
 
