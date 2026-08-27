@@ -100,17 +100,7 @@ export default async function sitemap() {
                 priority: 0.9,
             });
 
-            // District Product URLs
-            districts.forEach((district) => {
-                if (!district.slug) return;
 
-                urls.push({
-                    url: `${baseUrl}/${district.slug}/items/${product.slug}`,
-                    lastModified: new Date(),
-                    changeFrequency: "weekly",
-                    priority: 0.8,
-                });
-            });
         });
     } catch (error) {
         console.error("Sitemap Generation Error:", error);
