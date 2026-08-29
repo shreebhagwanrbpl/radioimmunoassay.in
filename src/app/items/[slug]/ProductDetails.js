@@ -1195,11 +1195,9 @@ ${product?.desc}
 
                             {/* Description */}
                             <p className="text-[#6B4A54] leading-7 md:leading-9 text-base md:text-lg">
-
                                 {product.desc ||
                                     product.description ||
-                                    "No description available."}
-
+                                    `High-precision ${product.title || "diagnostic laboratory analyzer"} supplied by Raj Biosis Private Limited across India. Contact our biomedical engineering team for technical specifications, calibration details, and customized price quotation.`}
                             </p>
 
 

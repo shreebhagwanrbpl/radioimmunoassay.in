@@ -63,43 +63,43 @@ export default function HeroSection({ city }) {
 
   const slides = [
     {
-      badge: "Reliable Medical Testing Tools",
+      badge: "Radioimmunoassay & IVD Diagnostic Solutions",
       badgeIcon: ShieldCheck,
-      title: heroData.title || "Quality Diagnostic Machines & Lab Equipment",
+      title: heroData.title || "Precision Radioimmunoassay Kits & Pathology Analyzers",
       description:
         heroData.description ||
-        "We supply easy-to-use blood test machines, biochemistry analyzers, RIA kits, and pathology tools for medical labs and hospitals.",
+        "Raj Biosis Private Limited supplies certified Radioimmunoassay (RIA) kits, 3-part & 5-part hematology cell counters, and automated biochemistry analyzers for clinical laboratories and hospitals across India.",
       visualType: "hematology",
       badgeColor: "bg-teal-50 border-teal-200 text-teal-700",
-      btn1: heroData.button1Text || "View Products",
+      btn1: heroData.button1Text || "Explore Catalog",
       btn1Link: makeLink("/items"),
-      btn2: heroData.button2Text || "Get in Touch",
+      btn2: heroData.button2Text || "Request Price Quote",
       btn2Link: makeLink("/contact"),
     },
     {
-      badge: "RIA Kits & Testing Supplies",
+      badge: "Certified RIA Kits & Clinical Reagents",
       badgeIcon: FlaskConical,
-      title: "Clean & Accurate Clinical Laboratory Reagents",
+      title: "Hormone Assay Reagents & Cold-Chain Logistics",
       description:
-        "Get fresh radioimmunoassay kits, testing liquids, and essential laboratory supplies delivered directly to your diagnostic center with temperature control.",
+        "Access pure, fresh Radioimmunoassay reagents, thyroid testing kits (T3, T4, TSH), cortisol assays, and pathology calibrators shipped with temperature-controlled logistics.",
       visualType: "reagents",
       badgeColor: "bg-blue-50 border-blue-200 text-blue-700",
-      btn1: "See All Supplies",
+      btn1: "Browse RIA Supplies",
       btn1Link: makeLink("/items"),
-      btn2: "Ask for Prices",
+      btn2: "Inquire Reagent Bulk Price",
       btn2Link: makeLink("/contact"),
     },
     {
-      badge: "Full Lab Setup & Repair",
+      badge: "Turnkey Pathology Setup & AMC Repair",
       badgeIcon: Award,
-      title: "Simple Lab Setup & Fast Technician Assistance",
+      title: "On-Site Instrument Calibration & Engineer Field Care",
       description:
-        "From picking the right instruments to on-site machine setup, staff training, and quick repair visits, we handle everything for your clinic.",
+        "Comprehensive diagnostic setup consulting, equipment installation, blood counter calibration, technician training, and rapid response AMC repair contracts.",
       visualType: "turnkey",
       badgeColor: "bg-indigo-50 border-indigo-200 text-indigo-700",
-      btn1: "Our Services",
+      btn1: "Our Services & AMC",
       btn1Link: makeLink("/services"),
-      btn2: "Talk to Specialist",
+      btn2: "Consult Biomedical Engineer",
       btn2Link: makeLink("/contact"),
     },
   ];

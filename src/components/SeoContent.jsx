@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MapPin, Building, ChevronRight } from "lucide-react";
+import { MapPin, Building, ChevronRight, ShieldCheck, Microscope, FlaskConical, Wrench } from "lucide-react";
 
 export default function SeoContent({ city = "" }) {
     const location = city || "India";
@@ -37,34 +37,34 @@ export default function SeoContent({ city = "" }) {
         "mainEntity": [
             {
                 "@type": "Question",
-                "name": `Can you supply laboratory equipment in ${location}?`,
+                "name": `Where can I source Radioimmunoassay (RIA) kits and pathology equipment in ${location}?`,
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": `Yes. Raj Biosis supplies CBC machines, hematology systems, biochemistry analyzers, ELISA readers, and testing kits across ${location} and nearby areas.`
+                    "text": `Raj Biosis Private Limited supplies certified Radioimmunoassay (RIA) reagents, thyroid assay kits (T3, T4, TSH), 3-part & 5-part hematology analyzers, biochemistry readers, and ELISA systems across ${location}.`
                 }
             },
             {
                 "@type": "Question",
-                "name": "What kind of lab machines and supplies do you offer?",
+                "name": "How are Radioimmunoassay reagents stored during shipping?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "We offer 3-part and 5-part hematology machines, biochemistry units, RIA kits, urine strip readers, and everyday clinical lab consumables."
+                    "text": "All immunoassay kits and temperature-sensitive reagents are dispatched using cold-chain packaging (2°C to 8°C) to maintain enzymatic and antibody stability upon arrival."
                 }
             },
             {
                 "@type": "Question",
-                "name": "Do your technicians help with machine setup and staff training?",
+                "name": "Do you offer on-site machine setup, calibration, and AMC repair contracts?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Yes. Our local field engineers handle complete machine setup, testing calibration, staff operational training, and ongoing AMC repairs."
+                    "text": "Yes. Experienced biomedical engineers from Raj Biosis perform on-site installation, blood counter calibration, staff operational guidance, and routine preventive AMC servicing."
                 }
             },
             {
                 "@type": "Question",
-                "name": "Who can order machines and reagents from Raj Biosis?",
+                "name": "Can Raj Biosis assist with setting up a new pathology diagnostic laboratory?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Pathology laboratories, diagnostic centers, hospital testing units, clinics, and research institutions across India."
+                    "text": "We provide end-to-end laboratory setup consultation, including selecting optimal 3-part or 5-part differential analyzers, biochemistry units, power setup advice, and reagent starter packages."
                 }
             }
         ]
@@ -78,18 +78,18 @@ export default function SeoContent({ city = "" }) {
                     __html: JSON.stringify(faqSchema),
                 }}
             />
-
             <div className="container-custom">
 
+                ```
                 {/* Heading */}
                 <div className="max-w-4xl mx-auto text-center">
 
-                    <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2 text-sm font-semibold text-slate-700 shadow-sm">
-                        Pathology & Diagnostic Equipment Supplier
+                    <span className="inline-flex items-center gap-2 rounded-full border border-teal-200 bg-teal-50 px-5 py-2 text-sm font-bold text-teal-800 shadow-sm">
+                        Complete Diagnostic Laboratory Support
                     </span>
 
                     <h2 className="mt-6 text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900">
-                        Laboratory & Diagnostic Machine Supplier in{" "}
+                        Reliable RIA, Pathology & Laboratory Equipment Solutions in{" "}
                         <span className="text-teal-600">
                             {location}
                         </span>
@@ -100,64 +100,77 @@ export default function SeoContent({ city = "" }) {
                 </div>
 
                 {/* Content Cards */}
-
                 <div className="mt-12 grid gap-6 md:grid-cols-2">
 
                     <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm hover:shadow-md transition-all duration-300">
                         <h3 className="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2">
-                            <Building className="text-teal-600" size={22} />
-                            <span>Reliable Diagnostic Machine Supplies</span>
+                            <FlaskConical className="text-teal-600" size={22} />
+                            <span>RIA Kits & Endocrine Diagnostic Reagents</span>
                         </h3>
+
                         <p className="text-slate-600 leading-relaxed text-base">
-                            <strong className="text-slate-900">Raj Biosis</strong> delivers reliable diagnostic machines and pathology tools across <strong>{location}</strong>. We supply cell counters, biochemistry analyzers, RIA kits, and urine readers to help clinics produce accurate test reports.
+                            <strong className="text-slate-900">Raj Biosis Private Limited</strong> supports laboratories in <strong>{location}</strong> with dependable Radioimmunoassay kits, hormone testing reagents, thyroid diagnostic products, and related laboratory consumables. Special attention is given to proper handling and temperature-controlled dispatch for sensitive diagnostic materials.
+                        </p>
+                    </div>
+
+                    <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm hover:shadow-md transition-all duration-300">
+                        <h3 className="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2">
+                            <Microscope className="text-teal-600" size={22} />
+                            <span>Hematology & Clinical Chemistry Systems</span>
+                        </h3>
+
+                        <p className="text-slate-600 leading-relaxed text-base">
+                            We provide laboratory equipment including 3-part and 5-part hematology analyzers, blood cell counting systems, and clinical chemistry instruments. Our solutions are selected to help diagnostic laboratories achieve efficient testing workflows and dependable day-to-day reporting.
+                        </p>
+                    </div>
+
+                    <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm hover:shadow-md transition-all duration-300">
+                        <h3 className="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2">
+                            <Wrench className="text-teal-600" size={22} />
+                            <span>Equipment Installation, Calibration & AMC</span>
+                        </h3>
+
+                        <p className="text-slate-600 leading-relaxed text-base">
+                            Our technical support services include equipment installation assistance, performance checks, routine calibration support, and preventive maintenance. Flexible AMC solutions help laboratories keep their diagnostic instruments operating smoothly while reducing unexpected interruptions.
                         </p>
                     </div>
 
                     <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm hover:shadow-md transition-all duration-300">
                         <h3 className="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2">
                             <Building className="text-teal-600" size={22} />
-                            <span>Accurate Testing & Quality Calibration</span>
+                            <span>Diagnostic Lab Planning & Setup Support</span>
                         </h3>
-                        <p className="text-slate-600 leading-relaxed text-base">
-                            Our main focus is giving healthcare teams easy access to high precision lab machinery. We support hospitals and diagnostic centers with tested instruments that ensure consistent patient results.
-                        </p>
-                    </div>
 
-                    <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm hover:shadow-md transition-all duration-300">
-                        <h3 className="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2">
-                            <Building className="text-teal-600" size={22} />
-                            <span>On-Site Installation & Repair Contracts</span>
-                        </h3>
                         <p className="text-slate-600 leading-relaxed text-base">
-                            We offer full machine setup, staff operational guidance, routine preventive checkups, and quick engineer visits. Whether setting up a new lab or upgrading old tools, our team guides you at every step.
-                        </p>
-                    </div>
-
-                    <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm hover:shadow-md transition-all duration-300">
-                        <h3 className="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2">
-                            <Building className="text-teal-600" size={22} />
-                            <span>Fast Regional Supply Network</span>
-                        </h3>
-                        <p className="text-slate-600 leading-relaxed text-base">
-                            Raj Biosis ships equipment and temperature-controlled reagents directly to laboratories across districts, helping medical teams keep testing uninterrupted.
+                            Raj Biosis assists new and expanding laboratories with practical guidance for selecting suitable diagnostic equipment, organizing testing areas, choosing essential instruments, and preparing teams for routine laboratory operations.
                         </p>
                     </div>
 
                 </div>
 
-                {/* Regional District Directory (For Dynamic SEO Crawling & Indexation) */}
+                {/* Regional District Directory */}
                 <div className="mt-16 rounded-3xl border border-slate-200 bg-slate-900 text-white p-8 lg:p-10 shadow-xl">
+
                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-white/10 pb-6">
+
                         <div>
-                            <span className="text-teal-400 font-bold text-xs uppercase tracking-wider">Local Coverage</span>
-                            <h3 className="text-2xl font-bold text-white mt-1">Local Lab Equipment Delivery by District</h3>
+                            <span className="text-teal-400 font-bold text-xs uppercase tracking-wider">
+                                Service Network
+                            </span>
+
+                            <h3 className="text-2xl font-bold text-white mt-1">
+                                Diagnostic Equipment Supply Across Nearby Districts
+                            </h3>
                         </div>
+
                         <span className="px-4 py-1.5 rounded-full text-xs font-semibold bg-white/10 text-slate-300 border border-white/10">
-                            Direct Shipping
+                            Temperature-Controlled Product Delivery
                         </span>
+
                     </div>
 
                     <div className="mt-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+
                         {topDistricts.map((d, i) => (
                             <Link
                                 key={i}
@@ -168,14 +181,19 @@ export default function SeoContent({ city = "" }) {
                                     <MapPin size={14} className="text-teal-400 shrink-0" />
                                     <span className="truncate">{d.name}</span>
                                 </span>
-                                <ChevronRight size={14} className="text-slate-500 group-hover:text-teal-400 shrink-0" />
+
+                                <ChevronRight
+                                    size={14}
+                                    className="text-slate-500 group-hover:text-teal-400 shrink-0"
+                                />
                             </Link>
                         ))}
+
                     </div>
+
                 </div>
 
                 {/* FAQ */}
-
                 <div className="mt-20">
 
                     <div className="text-center max-w-2xl mx-auto">
@@ -185,7 +203,7 @@ export default function SeoContent({ city = "" }) {
                         </span>
 
                         <h2 className="mt-6 text-3xl font-bold text-slate-900">
-                            Quick Answers to Common Queries
+                            Information About Our Laboratory Products & Technical Support
                         </h2>
 
                         <div className="mx-auto mt-4 h-1 w-20 rounded-full bg-teal-500" />
@@ -195,50 +213,60 @@ export default function SeoContent({ city = "" }) {
                     <div className="mt-12 grid gap-6 md:grid-cols-2">
 
                         <div className="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm hover:shadow-md transition-all duration-300">
+
                             <h3 className="text-xl font-semibold text-slate-900">
-                                Can you supply laboratory equipment in {location}?
+                                Which RIA and pathology products are available in {location}?
                             </h3>
 
                             <p className="mt-3 text-slate-600 leading-relaxed text-sm">
-                                Yes. Raj Biosis supplies CBC machines, hematology systems, biochemistry analyzers, ELISA readers, and testing kits across {location} and nearby areas.
+                                Raj Biosis provides access to a range of laboratory diagnostic products, including Radioimmunoassay reagents, hormone and thyroid testing kits, hematology analyzers, biochemistry instruments, and selected ELISA-based testing systems for laboratories in {location}.
                             </p>
+
                         </div>
 
                         <div className="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm hover:shadow-md transition-all duration-300">
+
                             <h3 className="text-xl font-semibold text-slate-900">
-                                What kind of lab machines and supplies do you offer?
+                                How do you handle temperature-sensitive diagnostic reagents?
                             </h3>
 
                             <p className="mt-3 text-slate-600 leading-relaxed text-sm">
-                                We offer 3-part and 5-part hematology machines, biochemistry units, RIA kits, urine strip readers, and everyday clinical lab consumables.
+                                Products that require controlled temperatures are prepared and dispatched using suitable insulated and cold-chain packaging methods. This helps maintain appropriate storage conditions during transportation until the material reaches the laboratory.
                             </p>
+
                         </div>
 
                         <div className="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm hover:shadow-md transition-all duration-300">
+
                             <h3 className="text-xl font-semibold text-slate-900">
-                                Do your technicians help with machine setup and staff training?
+                                Is technical assistance available after purchasing laboratory equipment?
                             </h3>
 
                             <p className="mt-3 text-slate-600 leading-relaxed text-sm">
-                                Yes. Our local field engineers handle complete machine setup, testing calibration, staff operational training, and ongoing AMC repairs.
+                                Yes. Depending on the equipment and service requirement, our team can assist with installation coordination, operational guidance, routine maintenance, calibration-related support, and AMC services for eligible laboratory instruments.
                             </p>
+
                         </div>
 
                         <div className="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm hover:shadow-md transition-all duration-300">
+
                             <h3 className="text-xl font-semibold text-slate-900">
-                                Who can order machines and reagents from Raj Biosis?
+                                Can you help with planning a new pathology or diagnostic laboratory?
                             </h3>
 
                             <p className="mt-3 text-slate-600 leading-relaxed text-sm">
-                                Pathology laboratories, diagnostic centers, hospital testing units, clinics, and research institutions across India.
+                                Yes. We can guide laboratories through equipment selection and basic setup planning based on their intended testing requirements. Our support can include recommendations for hematology, biochemistry, electrolyte, immunoassay, and other essential diagnostic systems.
                             </p>
+
                         </div>
 
                     </div>
 
                 </div>
+                ```
 
             </div>
+
         </section>
     );
-}
+}

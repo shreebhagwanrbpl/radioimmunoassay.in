@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 
@@ -27,10 +29,10 @@ const ProductCard = React.memo(function ProductCard({ product, district }) {
                     <h3 className="text-2xl font-bold text-slate-900">
                         {product.title}
                     </h3>
-                    <p className="mt-4 text-slate-600 leading-8">
+                    <p className="mt-4 text-slate-600 leading-relaxed text-sm">
                         {product.description ||
                             product.desc ||
-                            "Premium biomedical equipment designed for laboratories, hospitals and diagnostic centres."}
+                            "Certified clinical laboratory analyzer and diagnostic testing equipment supplied by Raj Biosis Private Limited with full warranty and engineer calibration."}
                     </p>
                     <div className="grid md:grid-cols-2 gap-4 mt-6">
                         <div className="bg-slate-50 rounded-xl p-4">

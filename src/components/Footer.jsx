@@ -216,11 +216,8 @@ export default function Footer() {
               />
             </Link>
 
-            <p className="mt-5 text-slate-600 leading-7">
-              Delivering trusted diagnostic
-              and biomedical solutions with
-              innovation, quality, and
-              precision healthcare support.
+            <p className="mt-5 text-slate-600 leading-relaxed text-sm">
+              Raj Biosis Private Limited is a premier distributor of Radioimmunoassay (RIA) kits, 3-part & 5-part hematology counters, and clinical biochemistry systems.
             </p>
 
             {/* Social Links */}
@@ -301,14 +298,14 @@ export default function Footer() {
           {/* Services Column (narrower col-span) */}
           <div className="lg:col-span-2">
             <h3 className="text-lg font-semibold mb-5">
-              Services
+              Diagnostic Solutions
             </h3>
 
-            <div className="flex flex-col gap-3 text-slate-600">
-              <p>Diagnostic Equipment</p>
-              <p>Laboratory Solutions</p>
-              <p>Biomedical Instruments</p>
-              <p>Maintenance Support</p>
+            <div className="flex flex-col gap-3 text-slate-600 text-sm">
+              <p>Radioimmunoassay (RIA)</p>
+              <p>Hematology Cell Counters</p>
+              <p>Biochemistry Analyzers</p>
+              <p>Biomedical AMC & Repair</p>
             </div>
           </div>
 

@@ -6,22 +6,22 @@ import SectionTitle from "./SectionTitle";
 export default function Testimonials() {
   const reviews = [
     {
-      name: "Dr. Rajesh Kumar",
-      role: "Pathology Lab Owner",
+      name: "Dr. R. K. Shekhawat",
+      role: "Director, Apex Pathology Laboratories",
       review:
-        "The cell counter we bought from Raj Biosis works smoothly every day. Their technician came on the same day for machine setup.",
+        "The 5-part hematology analyzer installed by Raj Biosis has performed flawlessly for over two years. Their biomedical engineer calibrated optical sensitivity on day one.",
     },
     {
-      name: "Amit Sharma",
-      role: "Diagnostic Center Manager",
+      name: "Virendra Rathore",
+      role: "Chief Biochemist, City Clinical Diagnostics",
       review:
-        "We regularly order RIA kits and biochemistry reagents here. The delivery is always fast and temperature controlled.",
+        "We source our Radioimmunoassay (RIA) thyroid kits and hormone assay controls exclusively from Raj Biosis. Temperature-monitored shipping preserves assay precision every single batch.",
     },
     {
-      name: "Neha Verma",
-      role: "Senior Lab Technician",
+      name: "Dr. Meenakshi Sundaram",
+      role: "Consultant Pathologist, Care Diagnostics",
       review:
-        "Clear guidance and easy operational training for our team. Great after-sales repair support whenever needed.",
+        "Raj Biosis handled our complete laboratory expansion from analyzer selection to staff operational training. Excellent preventive AMC service with zero testing downtime.",
     },
   ];
 
@@ -31,9 +31,9 @@ export default function Testimonials() {
 
         {/* Section Title */}
         <SectionTitle
-          badge="Client Feedback"
-          title="What Lab Directors & Doctors Say"
-          description="Real feedback from pathology clinics, hospitals, and diagnostic testing centers using our equipment."
+          badge="Verified Client Endorsements"
+          title="Trusted By Pathologists & Clinical Directors"
+          description="Direct operational experiences from pathology laboratories, hospital diagnostic centers, and reference testing units across India."
           center
         />
 

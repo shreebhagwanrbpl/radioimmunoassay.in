@@ -14,28 +14,28 @@ import ServiceCard from "./ServiceCard";
 export default function ServicesPreview() {
   const services = [
     {
-      icon: <Microscope size={30} />,
-      title: "Analyzer Supply",
+      icon: <FlaskConical size={30} />,
+      title: "Radioimmunoassay Kits",
       description:
-        "Blood cell counters, biochemistry units, and urine testing machines delivered ready to test.",
+        "Certified RIA reagents, thyroid panels (T3/T4/TSH), cortisol assays, and immunoassay calibrators delivered in thermal cold-chain packaging.",
     },
     {
-      icon: <FlaskConical size={30} />,
-      title: "RIA & Lab Supplies",
+      icon: <Microscope size={30} />,
+      title: "3-Part & 5-Part Cell Counters",
       description:
-        "Radioimmunoassay kits, diluents, and clinical chemicals delivered in temperature-safe packaging.",
+        "High-throughput differential hematology analyzers and blood cell counters calibrated for accurate CBC clinical diagnostics.",
     },
     {
       icon: <ShieldCheck size={30} />,
-      title: "Machine Repairs & AMC",
+      title: "Biomedical Engineer AMC Care",
       description:
-        "Regular calibration checkups and fast repair support to keep lab devices running smoothly.",
+        "Routine parameter calibration, optical checkups, and fast emergency repair dispatches by experienced field technicians.",
     },
     {
       icon: <Stethoscope size={30} />,
-      title: "New Lab Guidance",
+      title: "Turnkey Pathology Setup",
       description:
-        "Practical help choosing machines, space planning, and training your lab staff.",
+        "Facility layout guidance, analyzer selection, power backup advisory, and hands-on operational training for laboratory staff.",
     },
   ];
 
@@ -45,9 +45,9 @@ export default function ServicesPreview() {
 
         {/* Section Title */}
         <SectionTitle
-          badge="Key Solutions"
-          title="Complete Services For Diagnostic Labs"
-          description="From machinery supply and testing chemicals to machine installation, staff guidance, and routine repairs."
+          badge="Core Diagnostic Offerings"
+          title="Specialized Solutions For Pathology Laboratories"
+          description="From certified Radioimmunoassay reagents and blood cell counters to on-site engineer calibration and turnkey lab setup."
           center
         />
 
