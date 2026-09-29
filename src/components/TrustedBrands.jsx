@@ -1,10 +1,10 @@
 export default function TrustedBrands() {
   const brands = [
-    "HealthCare+",
-    "BioMed Labs",
-    "MediCore",
-    "Life Diagnostics",
-    "Care Plus",
+    "Roche Diagnostics",
+    "Mindray Medical",
+    "ERBA Diagnostics",
+    "Agappe Diagnostics",
+    "Bio-Rad Laboratories",
   ];
 
   return (
@@ -14,20 +14,18 @@ export default function TrustedBrands() {
         {/* Heading */}
         <div className="text-center">
 
-          <span className="inline-flex items-center rounded-full border border-slate-200 bg-white px-5 py-2 text-sm font-semibold text-slate-700 shadow-sm">
-            Trusted Partners
+          <span className="inline-flex items-center rounded-full border border-teal-200 bg-teal-50 px-5 py-2 text-sm font-bold text-teal-800 shadow-sm">
+            Authorized Brands & Manufacturers
           </span>
 
-          <h2 className="mt-6 text-3xl lg:text-4xl font-bold tracking-tight text-slate-900">
-            Trusted by Healthcare & Biomedical Organizations
+          <h2 className="mt-6 text-3xl lg:text-4xl font-extrabold tracking-tight text-slate-900">
+            Leading IVD Brands & Diagnostic Manufacturers
           </h2>
 
-          <div className="mx-auto mt-5 h-1 w-20 rounded-full bg-slate-300" />
+          <div className="mx-auto mt-5 h-1 w-20 rounded-full bg-teal-500" />
 
-          <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-slate-600">
-            Delivering reliable biomedical solutions and laboratory technologies
-            trusted by hospitals, diagnostic centres, healthcare institutions,
-            and research laboratories across India.
+          <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-slate-600">
+            Distributing genuine Radioimmunoassay reagents, cell counters, biochemistry analyzers, and clinical controls from premier global healthcare brands.
           </p>
 
         </div>

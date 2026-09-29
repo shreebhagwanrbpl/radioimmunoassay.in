@@ -100,7 +100,6 @@ export default function SeoContent({ city = "" }) {
                 </div>
 
                 {/* Content Cards */}
-
                 <div className="mt-12 grid gap-6 md:grid-cols-2">
 
                     <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm hover:shadow-md transition-all duration-300">

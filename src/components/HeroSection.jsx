@@ -32,7 +32,7 @@ export default function HeroSection({ city }) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
-  useEffect(() => { fetch("/api/site-data?page=home", {cache:"no-store"}).then(r=>r.json()).then(d=>{ if(d && Object.keys(d).length) setHeroData(d); }).catch(console.error).finally(()=>setLoading(false)); }, []);
+  useEffect(() => { fetch("/api/site-data?page=home", { cache: "no-store" }).then(r => r.json()).then(d => { if (d && Object.keys(d).length) setHeroData(d); }).catch(console.error).finally(() => setLoading(false)); }, []);
 
   // District Routing
   const districtSlug = city ? city.toLowerCase().replace(/\s+/g, "-") : "";
@@ -253,7 +253,7 @@ export default function HeroSection({ city }) {
                     <div className="relative h-40 rounded-2xl bg-slate-900 overflow-hidden p-4 flex flex-col justify-between shadow-inner">
                       {/* Grid Background */}
                       <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff10_1px,transparent_1px),linear-gradient(to_bottom,#ffffff10_1px,transparent_1px)] bg-[size:1.5rem_1.5rem]" />
-                      
+
                       <div className="relative z-10 flex items-center justify-between text-xs text-teal-400 font-mono">
                         <span>READING_STATUS: READY</span>
                         <span className="flex items-center gap-1">
@@ -416,9 +416,8 @@ export default function HeroSection({ city }) {
                   <button
                     key={idx}
                     onClick={() => setCurrentSlide(idx)}
-                    className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
-                      currentSlide === idx ? "w-8 bg-slate-900" : "w-2.5 bg-slate-300 hover:bg-slate-400"
-                    }`}
+                    className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${currentSlide === idx ? "w-8 bg-slate-900" : "w-2.5 bg-slate-300 hover:bg-slate-400"
+                      }`}
                     aria-label={`Slide ${idx + 1}`}
                   />
                 ))}

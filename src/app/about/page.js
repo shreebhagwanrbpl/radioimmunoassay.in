@@ -36,10 +36,10 @@ export default function AboutPage({ city = "" }) {
 
           {/* Top Feature Grid (Replaces old static image with dynamic feature card array) */}
           <div className="grid lg:grid-cols-12 gap-12 items-center">
-            
+
             {/* Left 6 Cols: Stats & Core Pillars Card Grid */}
             <div className="lg:col-span-6 grid sm:grid-cols-2 gap-6">
-              
+
               <div className="rounded-3xl border border-slate-200 bg-white p-7 shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden group">
                 <div className="w-14 h-14 rounded-2xl bg-teal-50 text-teal-600 flex items-center justify-center mb-5 group-hover:bg-teal-600 group-hover:text-white transition-all">
                   <Award size={28} />
@@ -88,7 +88,7 @@ export default function AboutPage({ city = "" }) {
 
             {/* Right 6 Cols: Main Company Overview */}
             <div className="lg:col-span-6 space-y-6">
-              
+
               <SectionTitle
                 badge="Who We Are"
                 title={`Your Dependable Partner for Pathology & Lab Supplies ${locationText}`}
@@ -129,7 +129,7 @@ export default function AboutPage({ city = "" }) {
 
           {/* Mission & Vision Split Section */}
           <div className="grid md:grid-cols-2 gap-8">
-            
+
             <div className="rounded-[32px] border border-slate-200 bg-gradient-to-br from-slate-900 to-slate-800 text-white p-8 lg:p-10 shadow-xl relative overflow-hidden">
               <div className="w-14 h-14 rounded-2xl bg-teal-500/20 border border-teal-500/30 text-teal-400 flex items-center justify-center mb-6">
                 <Target size={30} />
@@ -162,7 +162,7 @@ export default function AboutPage({ city = "" }) {
             />
 
             <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              
+
               <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
                 <div className="w-12 h-12 rounded-xl bg-slate-100 text-slate-800 flex items-center justify-center mb-4">
                   <Microscope size={24} />

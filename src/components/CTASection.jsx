@@ -65,19 +65,18 @@ export default function CTASection({ city }) {
             {/* Left Content */}
             <div>
 
-              <span className="inline-flex items-center px-5 py-2 rounded-full bg-white/10 border border-white/20 text-white text-sm font-semibold backdrop-blur-sm mb-6">
-                Need Help Choosing?
+              <span className="inline-flex items-center px-5 py-2 rounded-full bg-white/10 border border-white/20 text-teal-300 text-sm font-bold backdrop-blur-sm mb-6">
+                Consultation & Technical Support
               </span>
 
-              <h2 className="text-4xl lg:text-6xl font-bold leading-tight text-white">
-                Need Practical
+              <h2 className="text-4xl lg:text-5xl font-extrabold leading-tight text-white tracking-tight">
+                Upgrade Your Diagnostic
                 <br />
-                Lab Equipment?
+                Laboratory Setup Today
               </h2>
 
-              <p className="mt-6 text-slate-300 text-lg leading-8 max-w-xl">
-                Find the right testing instruments, RIA chemicals, and technical setup
-                services for your diagnostic facility without hassle.
+              <p className="mt-6 text-slate-300 text-lg leading-relaxed max-w-xl">
+                Connect with Raj Biosis for certified Radioimmunoassay (RIA) kits, high-throughput hematology analyzers, and customized AMC maintenance plans.
               </p>
 
             </div>
@@ -87,17 +86,16 @@ export default function CTASection({ city }) {
 
               <div className="w-full max-w-md rounded-[32px] bg-white border border-slate-200 p-8 shadow-2xl">
 
-                <div className="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mb-6">
-                  <PhoneCall size={30} className="text-slate-700" />
+                <div className="w-16 h-16 rounded-2xl bg-teal-50 border border-teal-100 flex items-center justify-center mb-6">
+                  <PhoneCall size={30} className="text-teal-700" />
                 </div>
 
                 <h3 className="text-2xl font-bold text-slate-900">
-                  Speak With Us
+                  Request Quotation
                 </h3>
 
-                <p className="mt-4 text-slate-600 leading-7">
-                  Get direct advice on equipment models, price details, installation steps,
-                  and service plans suited to your daily test volume.
+                <p className="mt-3 text-slate-600 leading-relaxed text-sm">
+                  Get exact price details, technical specification sheets, and on-site engineer installation schedules for your facility.
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4 mt-8">
@@ -106,17 +104,17 @@ export default function CTASection({ city }) {
                     href={makeLink("/contact")}
                     className="flex-1"
                   >
-                    <button className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-slate-900 px-6 py-4 font-semibold text-white shadow-lg transition-all duration-300 hover:bg-slate-800 hover:shadow-xl">
-                      Send Message
+                    <button className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-slate-900 px-6 py-4 font-bold text-white shadow-lg transition-all duration-300 hover:bg-slate-800 hover:shadow-xl cursor-pointer">
+                      Send Inquiry
                       <ArrowRight size={18} />
                     </button>
                   </Link>
 
                   <a
-                    href="tel:+919876543210"
-                    className="inline-flex items-center justify-center rounded-2xl border border-slate-300 bg-white px-6 py-4 font-semibold text-slate-800 transition-all duration-300 hover:bg-slate-100 hover:border-slate-400"
+                    href="tel:+919829000000"
+                    className="inline-flex items-center justify-center rounded-2xl border border-slate-300 bg-white px-6 py-4 font-bold text-slate-800 transition-all duration-300 hover:bg-slate-50 hover:border-slate-400 cursor-pointer"
                   >
-                    Call Directly
+                    Call Engineer
                   </a>
 
                 </div>

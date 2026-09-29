@@ -74,7 +74,7 @@ export default function ContactPage() {
     try {
       setSubmitting(true);
 
-      await fetch("/api/contact-query", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({...form, createdAt:new Date().toISOString()}) }).then(async r=>{ if(!r.ok) throw new Error((await r.json()).error||"Submission failed"); });
+      await fetch("/api/contact-query", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...form, createdAt: new Date().toISOString() }) }).then(async r => { if (!r.ok) throw new Error((await r.json()).error || "Submission failed"); });
 
       toast.success(
         "Message submitted successfully"
@@ -112,7 +112,7 @@ export default function ContactPage() {
           doc(
             db,
             "websites",
-            "haemoglobinstripcom",
+            "radioimmunoassayin",
             "districts",
             currentDistrict
           )
@@ -128,7 +128,7 @@ export default function ContactPage() {
 
     loadDistrict();
   }, [currentDistrict]);
-  useEffect(() => { fetch("/api/site-data?page=contact", {cache:"no-store"}).then(r=>r.json()).then(d=>setContactInfo(d?.contactInfo || [])).catch(console.error).finally(()=>setLoading(false)); }, []);
+  useEffect(() => { fetch("/api/site-data?page=contact", { cache: "no-store" }).then(r => r.json()).then(d => setContactInfo(d?.contactInfo || [])).catch(console.error).finally(() => setLoading(false)); }, []);
 
 
 

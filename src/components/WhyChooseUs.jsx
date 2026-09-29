@@ -14,27 +14,27 @@ export default function WhyChooseUs() {
   const features = [
     {
       icon: <Microscope size={30} />,
-      title: "Proven Test Accuracy",
+      title: "Verified Testing Precision",
       description:
-        "High quality testing instruments checked thoroughly to ensure clear and trustworthy results.",
+        "Every 3-part & 5-part hematology counter and biochemistry unit is pre-calibrated to deliver strict analytical accuracy for patient reports.",
     },
     {
       icon: <ShieldCheck size={30} />,
-      title: "Fair & Honest Pricing",
+      title: "Certified RIA Reagent Purity",
       description:
-        "Direct supply without hidden costs so diagnostic centers get genuine value for money.",
+        "Fresh radioimmunoassay kits and hormone assay reagents tested for lot-to-lot consistency and maximum binding specificity.",
     },
     {
       icon: <HeartPulse size={30} />,
-      title: "Fast Local Delivery",
+      title: "Cold-Chain Direct Shipping",
       description:
-        "Quick dispatch of machines, RIA kits, and testing chemicals directly to your location.",
+        "Temperature-monitored refrigerated dispatch for immunoassay kits, controls, and calibrators to preserve enzymatic and isotope integrity.",
     },
     {
       icon: <BadgeCheck size={30} />,
-      title: "Direct Technical Help",
+      title: "On-Site Engineer Support",
       description:
-        "Friendly local engineers ready to visit your lab for installation, training, and maintenance.",
+        "Dedicated biomedical technicians for on-site machine commissioning, staff operational guidance, and rapid AMC maintenance visits.",
     },
   ];
 
@@ -44,9 +44,9 @@ export default function WhyChooseUs() {
 
         {/* Section Title */}
         <SectionTitle
-          badge="Why Work With Us"
-          title="Simple, Reliable & Honest Service"
-          description="We provide easy-to-use testing machines, fresh lab reagents, and fast technician support so your clinic runs without any downtime."
+          badge="Why Clinical Labs Trust Raj Biosis"
+          title="Uncompromising Analytical Precision & Technical Care"
+          description="We empower pathology centers with certified Radioimmunoassay supplies, high-throughput blood analyzers, and responsive field engineer service."
           center
         />
 
