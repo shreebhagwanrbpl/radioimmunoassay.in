@@ -23,7 +23,7 @@ const ProductLink = memo(function ProductLink({ item, category, scrollToProduct 
   return (
     <button
       onClick={() => scrollToProduct(item.slug, category)}
-      className="block w-full text-left py-1 text-sm text-slate-500 hover:text-[#8B2748] hover:translate-x-1 transition-all duration-200 font-medium"
+      className="block w-full text-left py-1 text-sm text-slate-500 hover:text-slate-900 hover:translate-x-1 transition-all duration-200 font-medium"
     >
       • {item.title}
     </button>
@@ -44,15 +44,15 @@ const SubCategoryItem = memo(function SubCategoryItem({
       {/* Subcategory Header */}
       <button
         onClick={() => toggleSubCategory(category, subCategory)}
-        className="w-full text-left py-1.5 flex justify-between items-center text-xs font-bold text-[#8B2748] hover:text-[#A52F52] transition-colors uppercase tracking-wider border-b border-slate-100 pb-1"
+        className="w-full text-left py-1.5 flex justify-between items-center text-xs font-bold text-slate-800 hover:text-slate-950 transition-colors uppercase tracking-wider border-b border-slate-100 pb-1"
       >
         <span className="flex items-center gap-1.5">
           <span className={`transition-transform duration-200 ${isSubOpened ? "rotate-90" : ""}`}>
-            <ChevronRight size={12} className="text-[#8B2748]" />
+            <ChevronRight size={12} className="text-slate-600" />
           </span>
           {subCategory}
         </span>
-        <span className="text-[10px] font-semibold bg-rose-50 text-[#8B2748] px-1.5 py-0.5 rounded-full">
+        <span className="text-[10px] font-semibold bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded-full">
           {subList.length}
         </span>
       </button>
@@ -98,17 +98,17 @@ const CategoryItem = memo(function CategoryItem({
       <button
         onClick={() => toggleCategory(category)}
         className={`sticky top-[116px] z-10 w-full px-4 py-3 flex justify-between items-center rounded-2xl transition-all duration-200 text-left ${isActive
-          ? "bg-rose-50 text-[#8B2748] font-bold"
-          : "bg-white text-slate-700 hover:bg-slate-50 hover:text-[#8B2748]"
+          ? "bg-slate-900 text-white font-bold shadow-sm"
+          : "bg-white text-slate-700 hover:bg-slate-50 hover:text-slate-900"
           }`}
       >
         <span className="flex items-center gap-3 text-sm font-semibold leading-none">
           <span className={`transition-transform duration-200 ${isOpened ? "rotate-90" : ""}`}>
-            <ChevronRight size={16} className={isActive ? "text-[#8B2748]" : "text-slate-400 group-hover:text-[#8B2748]"} />
+            <ChevronRight size={16} className={isActive ? "text-white" : "text-slate-400 group-hover:text-slate-900"} />
           </span>
           {category}
         </span>
-        <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${isActive ? "bg-rose-50 text-[#A52F52]" : "bg-slate-100 text-slate-500"
+        <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${isActive ? "bg-white/20 text-white" : "bg-slate-100 text-slate-500"
           }`}>
           {categoryProductCount}
         </span>
@@ -317,11 +317,7 @@ export default function ProductsClient({ initialProducts = [], district = null, 
 
   return (
     <Profiler id="ProductsLayout" onRender={onRenderCallback}>
-      {/* Banner */}
-      <PageBanner
-        title={city ? `Our Products in ${city}` : "Our Products"}
-        subtitle="Explore advanced biomedical and diagnostic equipment designed for modern healthcare excellence."
-      />
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -376,7 +372,7 @@ export default function ProductsClient({ initialProducts = [], district = null, 
             placeholder="Search products..."
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            className="w-full h-16 pl-14 pr-5 rounded-2xl border border-slate-200 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-[#A52F52]"
+            className="w-full h-16 pl-14 pr-5 rounded-2xl border border-slate-200 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-900"
           />
         </div>
 
@@ -404,7 +400,7 @@ export default function ProductsClient({ initialProducts = [], district = null, 
                   placeholder="Search categories..."
                   value={categorySearch}
                   onChange={(e) => setCategorySearch(e.target.value)}
-                  className="w-full h-10 pl-10 pr-4 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:outline-none focus:ring-2 focus:ring-[#A52F52] focus:bg-white transition-all"
+                  className="w-full h-10 pl-10 pr-4 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900 focus:bg-white transition-all"
                 />
               </div>
             </div>
@@ -442,7 +438,7 @@ export default function ProductsClient({ initialProducts = [], district = null, 
           <div className="space-y-16">
             {filteredProducts.length === 0 ? (
               <div className="bg-white border border-slate-200 rounded-[32px] p-10 lg:p-16 text-center shadow-lg">
-                <div className="w-24 h-24 mx-auto rounded-full bg-rose-50 flex items-center justify-center text-5xl mb-6">
+                <div className="w-24 h-24 mx-auto rounded-full bg-slate-100 flex items-center justify-center text-5xl mb-6">
                   🔍
                 </div>
 
@@ -452,7 +448,7 @@ export default function ProductsClient({ initialProducts = [], district = null, 
 
                 <p className="mt-4 text-slate-500 max-w-xl mx-auto leading-7">
                   {"We couldn't find any products matching"}
-                  <span className="font-semibold text-[#8B2748]">
+                  <span className="font-semibold text-slate-900">
                     {" \"" + productSearch + "\" "}
                   </span>
                   . Please try another keyword or browse categories.
@@ -463,7 +459,7 @@ export default function ProductsClient({ initialProducts = [], district = null, 
                     setSearchInput("");
                     setProductSearch("");
                   }}
-                  className="mt-8 px-8 py-3 rounded-xl bg-gradient-to-r from-[#7A1F3D] to-[#A52F52] text-white font-semibold hover:from-[#681732] hover:to-[#922646] transition"
+                  className="mt-8 px-8 py-3 rounded-xl bg-slate-900 text-white font-semibold hover:bg-slate-800 shadow-md transition"
                 >
                   View All Products
                 </button>
@@ -560,7 +556,7 @@ export default function ProductsClient({ initialProducts = [], district = null, 
                 key={index}
                 className="bg-white rounded-[30px] border border-slate-100 card-shadow text-center p-8"
               >
-                <div className="w-16 h-16 mx-auto rounded-[22px] bg-rose-50 text-[#8B2748] flex items-center justify-center mb-6">
+                <div className="w-16 h-16 mx-auto rounded-[22px] bg-slate-100 text-slate-800 flex items-center justify-center mb-6">
                   {item.icon}
                 </div>
 
@@ -578,7 +574,7 @@ export default function ProductsClient({ initialProducts = [], district = null, 
       {showTopButton && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-8 right-8 z-50 w-14 h-14 rounded-full text-white bg-gradient-to-r from-[#7A1F3D] to-[#A52F52] hover:from-[#681732] hover:to-[#922646] shadow-2xl hover:scale-110 transition flex items-center justify-center"
+          className="fixed bottom-8 right-8 z-50 w-14 h-14 rounded-full text-white bg-slate-900 hover:bg-slate-800 shadow-2xl hover:scale-110 transition flex items-center justify-center"
         >
           <ChevronUp size={24} />
         </button>

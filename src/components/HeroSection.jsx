@@ -3,8 +3,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 import {
   ArrowRight,
   ShieldCheck,
@@ -34,25 +32,7 @@ export default function HeroSection({ city }) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
-  useEffect(() => {
-    const fetchHeroData = async () => {
-      try {
-        const snap = await getDoc(
-          doc(db, "websites", "radioimmunoassayin", "pages", "home")
-        );
-
-        if (snap.exists()) {
-          setHeroData(snap.data());
-        }
-      } catch (error) {
-        console.error("Error fetching hero data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchHeroData();
-  }, []);
+  useEffect(() => { fetch("/api/site-data?page=home", {cache:"no-store"}).then(r=>r.json()).then(d=>{ if(d && Object.keys(d).length) setHeroData(d); }).catch(console.error).finally(()=>setLoading(false)); }, []);
 
   // District Routing
   const districtSlug = city ? city.toLowerCase().replace(/\s+/g, "-") : "";
@@ -467,4 +447,4 @@ export default function HeroSection({ city }) {
     </section>
   );
 }
-
+

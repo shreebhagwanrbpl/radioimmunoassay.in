@@ -1,4 +1,5 @@
 "use client";
+import { getDoc, doc, db } from "@/lib/api-data-client";
 
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
@@ -15,14 +16,6 @@ import {
     FaLink,
 } from "react-icons/fa";
 
-import {
-    doc,
-    getDoc,
-    getDocs,
-    addDoc,
-    collection,
-} from "firebase/firestore";
-import { db } from "@/lib/firebase";
 import { fetchFullCatalog } from "@/lib/data-fetcher";
 import { Download } from "lucide-react";
 const makeSlug = (text = "") =>
@@ -233,22 +226,14 @@ export default function ProductDetails({ slug, initialProduct = null }) {
         try {
             setSubmitting(true);
 
-            await addDoc(
-                collection(
-                    db,
-                    "websitesQueries",
-                    "radioimmunoassayin",
-                    "productQueries"
-                ),
-                {
+            await fetch("/api/product-query", {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
                     ...form,
                     productName: product.title,
                     productSlug: product.slug,
                     brand: product.brand || "",
                     model: product.model || "",
                     createdAt: new Date(),
-                }
-            );
+                })}).then(async r=>{if(!r.ok) throw new Error((await r.json()).error||"Submission failed");});
 
             toast.success(
                 "Your enquiry has been submitted successfully."
@@ -537,14 +522,14 @@ ${product?.desc}
 
 
                                     {!imageLoaded && (
-                                        <div className="absolute inset-0 bg-[#F3E5E8] animate-pulse" />
+                                        <div className="absolute inset-0 bg-slate-100 animate-pulse" />
                                     )}
 
 
 
                                     <Image
-                                        src={selectedImage || product.image}
-                                        alt={product.title}
+                                        src={selectedImage || product.image || "/logo.png"}
+                                        alt={product.title || "Product Image"}
                                         fill
                                         priority
                                         onLoad={() => setImageLoaded(true)}
@@ -575,7 +560,7 @@ ${product?.desc}
                             {(product.images?.length
                                 ? product.images
                                 : [product.image]
-                            ).map((img, index) => (
+                            ).filter(Boolean).map((img, index) => (
 
 
                                 <button
@@ -595,8 +580,8 @@ ${product?.desc}
 
         ${selectedMedia === "image" &&
                                             selectedImage === img
-                                            ? "border-[#1D293E] shadow-[0_5px_15px_rgba(123,30,58,0.25)]"
-                                            : "border-[#1D293E] hover:border-[#1D293E]"
+                                            ? "border-[#1D293E] shadow-md"
+                                            : "border-slate-200 hover:border-slate-400"
                                         }
       `}
                                 >
@@ -640,8 +625,8 @@ ${product?.desc}
         transition-all
 
         ${selectedMedia === "video"
-                                            ? "border-[#1D293E] bg-[#FFF5F7] text-[#1D293E]"
-                                            : "border-[#1D293E] hover:bg-[#FFF5F7]"
+                                            ? "border-[#1D293E] bg-slate-100 text-[#1D293E]"
+                                            : "border-slate-200 hover:bg-slate-50"
                                         }
       `}
                                 >
@@ -677,20 +662,20 @@ ${product?.desc}
         h-20 
         rounded-xl 
         border 
-        border-[#1D293E]
+        border-slate-200
         flex 
         flex-col 
         items-center 
         justify-center
         text-[#1D293E]
-        hover:bg-[#FFF5F7]
+        hover:bg-slate-50
         transition-all
       "
                                 >
 
                                     📄
 
-                                    <span className="text-xs text-[#6B4A54]">
+                                    <span className="text-xs text-slate-500">
                                         PDF
                                     </span>
 
@@ -720,7 +705,7 @@ ${product?.desc}
     lg:text-5xl 
     font-bold 
     leading-tight 
-    text-[#2D1B21]
+    text-slate-900
   ">
                                 {product.title}
                             </h1>
@@ -742,14 +727,14 @@ ${product?.desc}
         h-12 
         rounded-full 
         border 
-        border-[#1D293E]
+        border-slate-200
         bg-white 
-        text-[#1D293E]
-        shadow-md
+        text-slate-700
+        shadow-sm
         flex 
         items-center 
         justify-center 
-        hover:bg-[#FFF5F7]
+        hover:bg-slate-50
         hover:scale-105
         transition-all
       "
@@ -772,9 +757,9 @@ ${product?.desc}
         w-56 
         bg-white 
         rounded-xl 
-        shadow-[0_20px_50px_rgba(123,30,58,0.15)]
+        shadow-xl
         border 
-        border-[#1D293E]
+        border-slate-200
         p-2 
         z-50
       ">
@@ -792,9 +777,9 @@ ${product?.desc}
             flex 
             items-center 
             gap-2
-            text-[#6B4A54]
-            hover:bg-[#FFF5F7]
-            hover:text-[#1D293E]
+            text-slate-600
+            hover:bg-slate-50
+            hover:text-slate-900
             transition
           "
                                         >
@@ -820,9 +805,9 @@ ${product?.desc}
             flex 
             items-center 
             gap-2
-            text-[#6B4A54]
-            hover:bg-[#FFF5F7]
-            hover:text-[#1D293E]
+            text-slate-600
+            hover:bg-slate-50
+            hover:text-slate-900
             transition
           "
                                         >
@@ -848,9 +833,9 @@ ${product?.desc}
             flex 
             items-center 
             gap-2
-            text-[#6B4A54]
-            hover:bg-[#FFF5F7]
-            hover:text-[#1D293E]
+            text-slate-600
+            hover:bg-slate-50
+            hover:text-slate-900
             transition
           "
                                         >
@@ -876,9 +861,9 @@ ${product?.desc}
             flex 
             items-center 
             gap-2
-            text-[#6B4A54]
-            hover:bg-[#FFF5F7]
-            hover:text-[#1D293E]
+            text-slate-600
+            hover:bg-slate-50
+            hover:text-slate-900
             transition
           "
                                         >
@@ -1142,16 +1127,13 @@ ${product?.desc}
                                     disabled={submitting}
                                     className="
         w-full
-        bg-gradient-to-r
-        from-[#1D293E]
-        to-[#A63D5A]
+        bg-slate-900
         text-white
         py-4
         rounded-2xl
         font-semibold
-        shadow-md
-        hover:from-[#1D293E]
-        hover:to-[#1D293E]
+        shadow-lg
+        hover:bg-slate-800
         transition-all
         duration-300
         disabled:opacity-70
@@ -1661,7 +1643,7 @@ ${product?.desc}
                         alignItems: "center",
                         justifyContent: "center",
                         height: "320px",
-                        backgroundColor: "#FFF8F9"
+                        backgroundColor: "#f8fafc"
                     }}>
                         <img
                             src={brochureImage || "/placeholder.jpg"}
@@ -1671,55 +1653,55 @@ ${product?.desc}
 
                     {/* Right Column: Specs */}
                     <div style={{ flex: "1", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-                        <div style={{ backgroundColor: "#FFF8F9", border: "1px solid #1D293E", borderRadius: "16px", padding: "20px", height: "100%", boxSizing: "border-box" }}>
+                        <div style={{ backgroundColor: "#f8fafc", border: "1px solid #1D293E", borderRadius: "16px", padding: "20px", height: "100%", boxSizing: "border-box" }}>
                             <h3 style={{ margin: "0 0 15px 0", color: "#1D293E", fontSize: "18px", fontWeight: "700", borderBottom: "1px solid #1D293E", paddingBottom: "8px" }}>
                                 Specifications
                             </h3>
                             <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                                <p style={{ margin: "0", fontSize: "14px", color: "#6B4A54" }}>
-                                    <strong style={{ color: "#2D1B21" }}>Brand:</strong> {product.brand || "Raj Biosis"}
+                                <p style={{ margin: "0", fontSize: "14px", color: "#475569" }}>
+                                    <strong style={{ color: "#0f172a" }}>Brand:</strong> {product.brand || "Raj Biosis"}
                                 </p>
-                                <p style={{ margin: "0", fontSize: "14px", color: "#6B4A54" }}>
-                                    <strong style={{ color: "#2D1B21" }}>Model:</strong> {product.model || "N/A"}
+                                <p style={{ margin: "0", fontSize: "14px", color: "#475569" }}>
+                                    <strong style={{ color: "#0f172a" }}>Model:</strong> {product.model || "N/A"}
                                 </p>
                                 {product.instrument && (
-                                    <p style={{ margin: "0", fontSize: "14px", color: "#6B4A54" }}>
-                                        <strong style={{ color: "#2D1B21" }}>Instrument:</strong> {product.instrument}
+                                    <p style={{ margin: "0", fontSize: "14px", color: "#475569" }}>
+                                        <strong style={{ color: "#0f172a" }}>Instrument:</strong> {product.instrument}
                                     </p>
                                 )}
                                 {product.category && (
-                                    <p style={{ margin: "0", fontSize: "14px", color: "#6B4A54" }}>
-                                        <strong style={{ color: "#2D1B21" }}>Category:</strong> {product.category}
+                                    <p style={{ margin: "0", fontSize: "14px", color: "#475569" }}>
+                                        <strong style={{ color: "#0f172a" }}>Category:</strong> {product.category}
                                     </p>
                                 )}
                                 {product.subCategory && (
-                                    <p style={{ margin: "0", fontSize: "14px", color: "#6B4A54" }}>
-                                        <strong style={{ color: "#2D1B21" }}>Subcategory:</strong> {product.subCategory}
+                                    <p style={{ margin: "0", fontSize: "14px", color: "#475569" }}>
+                                        <strong style={{ color: "#0f172a" }}>Subcategory:</strong> {product.subCategory}
                                     </p>
                                 )}
                                  {product.capacity && (
-                                    <p style={{ margin: "0", fontSize: "14px", color: "#6B4A54" }}>
-                                        <strong style={{ color: "#2D1B21" }}>Capacity:</strong> {product.capacity}
+                                    <p style={{ margin: "0", fontSize: "14px", color: "#475569" }}>
+                                        <strong style={{ color: "#0f172a" }}>Capacity:</strong> {product.capacity}
                                     </p>
                                 )}
                                  {product.throughput && (
-                                    <p style={{ margin: "0", fontSize: "14px", color: "#6B4A54" }}>
-                                        <strong style={{ color: "#2D1B21" }}>Throughput:</strong> {product.throughput}
+                                    <p style={{ margin: "0", fontSize: "14px", color: "#475569" }}>
+                                        <strong style={{ color: "#0f172a" }}>Throughput:</strong> {product.throughput}
                                     </p>
                                 )}
                                  {product.usage && (
-                                    <p style={{ margin: "0", fontSize: "14px", color: "#6B4A54" }}>
-                                        <strong style={{ color: "#2D1B21" }}>Usage:</strong> {product.usage}
+                                    <p style={{ margin: "0", fontSize: "14px", color: "#475569" }}>
+                                        <strong style={{ color: "#0f172a" }}>Usage:</strong> {product.usage}
                                     </p>
                                 )}
                                  {product.automation && (
-                                    <p style={{ margin: "0", fontSize: "14px", color: "#6B4A54" }}>
-                                        <strong style={{ color: "#2D1B21" }}>Automation:</strong> {product.automation}
+                                    <p style={{ margin: "0", fontSize: "14px", color: "#475569" }}>
+                                        <strong style={{ color: "#0f172a" }}>Automation:</strong> {product.automation}
                                     </p>
                                 )}
                                  {product.availability && (
-                                    <p style={{ margin: "0", fontSize: "14px", color: "#6B4A54" }}>
-                                        <strong style={{ color: "#2D1B21" }}>Availability:</strong> {product.availability}
+                                    <p style={{ margin: "0", fontSize: "14px", color: "#475569" }}>
+                                        <strong style={{ color: "#0f172a" }}>Availability:</strong> {product.availability}
                                     </p>
                                 )}
                             </div>
@@ -1732,7 +1714,7 @@ ${product?.desc}
                     <h3 style={{ color: "#1D293E", fontSize: "18px", fontWeight: "700", borderLeft: "4px solid #1D293E", paddingLeft: "10px", margin: "0 0 12px 0" }}>
                         Product Overview
                     </h3>
-                    <p style={{ fontSize: "14px", lineHeight: "1.6", color: "#6B4A54", margin: "0", textAlign: "justify" }}>
+                    <p style={{ fontSize: "14px", lineHeight: "1.6", color: "#475569", margin: "0", textAlign: "justify" }}>
                         {product.description || product.desc || "Premium biomedical equipment designed for laboratories, hospitals, and diagnostic centers."}
                     </p>
                 </div>
@@ -1744,7 +1726,7 @@ ${product?.desc}
                     paddingTop: "20px",
                     textAlign: "center",
                     fontSize: "11px",
-                    color: "#9A7B84",
+                    color: "#64748b",
                     lineHeight: "1.5"
                 }}>
                     <p style={{ margin: "0", fontWeight: "600" }}>Office Address: {contactData.address}</p>

@@ -1,8 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -38,60 +36,9 @@ export default function Footer() {
       ? pathParts[0]
       : "";
 
-  useEffect(() => {
-    const loadContact = async () => {
-      try {
-        const snap = await getDoc(
-          doc(
-            db,
-            "websites",
-            "radioimmunoassayin",
-            "pages",
-            "contact"
-          )
-        );
+  useEffect(() => { fetch("/api/site-data?page=contact", {cache:"no-store"}).then(r=>r.json()).then(d=>setContactInfo(d?.contactInfo || [])).catch(console.error).finally(()=>setLoading(false)); }, []);
 
-        if (snap.exists()) {
-          setContactInfo(
-            snap.data().contactInfo || []
-          );
-        }
-
-        setLoading(false);
-      } catch (err) {
-        console.log(err);
-        setLoading(false);
-      }
-    };
-
-    loadContact();
-  }, []);
-
-  useEffect(() => {
-    const loadDistrict = async () => {
-      if (!district) return;
-
-      try {
-        const snap = await getDoc(
-          doc(
-            db,
-            "websites",
-            "radioimmunoassayin",
-            "districts",
-            district
-          )
-        );
-
-        if (snap.exists()) {
-          setDistrictData(snap.data());
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    loadDistrict();
-  }, [district]);
+  useEffect(() => { if(!district) return; fetch(`/api/site-data?page=district&district=${encodeURIComponent(district)}`, {cache:"no-store"}).then(r=>r.json()).then(setDistrictData).catch(console.error); }, [district]);
 
   const [categories, setCategories] = useState([]);
 

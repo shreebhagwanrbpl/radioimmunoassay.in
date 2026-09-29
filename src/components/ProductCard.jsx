@@ -11,14 +11,15 @@ const ProductCard = React.memo(function ProductCard({ product, district }) {
                 {/* Image */}
                 <div className="relative h-[180px] sm:h-[220px] rounded-2xl lg:rounded-3xl overflow-hidden bg-slate-100">
                     <img
-                        src={product.images?.[0] || product.image || "/placeholder.jpg"}
+                        src={
+                            product.images?.[0] ||
+                            product.image ||
+                            "/placeholder.jpg"
+                        }
                         alt={product.title}
                         loading="lazy"
                         decoding="async"
                         className="w-full h-full object-contain p-5"
-                        onError={(e) => {
-                            e.currentTarget.src = "/placeholder.jpg";
-                        }}
                     />
                 </div>
 
@@ -27,27 +28,48 @@ const ProductCard = React.memo(function ProductCard({ product, district }) {
                     <h3 className="text-2xl font-bold text-slate-900">
                         {product.title}
                     </h3>
+
                     <p className="mt-4 text-slate-600 leading-8">
                         {product.description ||
                             product.desc ||
                             "Premium biomedical equipment designed for laboratories, hospitals and diagnostic centres."}
                     </p>
+
                     <div className="grid md:grid-cols-2 gap-4 mt-6">
                         <div className="bg-slate-50 rounded-xl p-4">
-                            <p className="text-xs uppercase text-slate-400">Brand</p>
-                            <p className="font-semibold mt-1">{product.brand || "N/A"}</p>
+                            <p className="text-xs uppercase text-slate-400">
+                                Brand
+                            </p>
+                            <p className="font-semibold mt-1">
+                                {product.brand || "N/A"}
+                            </p>
                         </div>
+
                         <div className="bg-slate-50 rounded-xl p-4">
-                            <p className="text-xs uppercase text-slate-400">Model</p>
-                            <p className="font-semibold mt-1">{product.model || "N/A"}</p>
+                            <p className="text-xs uppercase text-slate-400">
+                                Model
+                            </p>
+                            <p className="font-semibold mt-1">
+                                {product.model || "N/A"}
+                            </p>
                         </div>
+
                         <div className="bg-slate-50 rounded-xl p-4">
-                            <p className="text-xs uppercase text-slate-400">Instrument</p>
-                            <p className="font-semibold mt-1">{product.instrument || "N/A"}</p>
+                            <p className="text-xs uppercase text-slate-400">
+                                Instrument
+                            </p>
+                            <p className="font-semibold mt-1">
+                                {product.instrument || "N/A"}
+                            </p>
                         </div>
+
                         <div className="bg-slate-50 rounded-xl p-4">
-                            <p className="text-xs uppercase text-slate-400">Category</p>
-                            <p className="font-semibold mt-1">{product.category}</p>
+                            <p className="text-xs uppercase text-slate-400">
+                                Category
+                            </p>
+                            <p className="font-semibold mt-1">
+                                {product.category}
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -60,7 +82,7 @@ const ProductCard = React.memo(function ProductCard({ product, district }) {
                                 ? `/${district}/items/${product.slug}`
                                 : `/items/${product.slug}`
                         }
-                        className="px-8 py-4 rounded-2xl bg-[#8B2748] !text-white font-semibold hover:bg-[#A52F52] transition"
+                        className="px-8 py-4 rounded-2xl bg-slate-900 !text-white font-semibold hover:bg-slate-800 shadow-md hover:shadow-lg transition-all duration-300"
                     >
                         Get Quote
                     </Link>

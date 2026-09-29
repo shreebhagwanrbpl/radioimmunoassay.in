@@ -213,4 +213,4 @@ export default function AboutPage({ city = "" }) {
       <CTASection city={city} />
     </>
   );
-}
+}

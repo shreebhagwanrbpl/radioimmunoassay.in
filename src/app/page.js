@@ -18,4 +18,4 @@ export default function Home({ city = "" }) {
       <CTASection city={city} />
     </>
   );
-}
+}

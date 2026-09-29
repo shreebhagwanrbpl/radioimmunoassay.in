@@ -1,4 +1,5 @@
 "use client";
+import { getDoc, doc, db } from "@/lib/api-data-client";
 
 import { useEffect, useState } from "react";
 import {
@@ -20,9 +21,6 @@ import PageBanner from "@/components/PageBanner";
 import SectionTitle from "@/components/SectionTitle";
 import ServiceCard from "@/components/ServiceCard";
 import CTASection from "@/components/CTASection";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
-
 export default function ServicesPage({ city = "" }) {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -147,68 +145,68 @@ export default function ServicesPage({ city = "" }) {
           <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {loading
               ? Array.from({ length: 6 }).map((_, index) => (
-                  <div
-                    key={index}
-                    className="rounded-[30px] border border-slate-200 bg-white p-8 shadow-sm animate-pulse"
-                  >
-                    <div className="mb-7 h-16 w-16 rounded-2xl bg-slate-200"></div>
-                    <div className="mb-6 h-7 w-3/4 rounded bg-slate-200"></div>
-                    <div className="mb-6 h-1 w-14 rounded-full bg-slate-200"></div>
-                    <div className="space-y-3">
-                      <div className="h-4 rounded bg-slate-200"></div>
-                      <div className="h-4 w-11/12 rounded bg-slate-200"></div>
-                      <div className="h-4 w-8/12 rounded bg-slate-200"></div>
-                    </div>
+                <div
+                  key={index}
+                  className="rounded-[30px] border border-slate-200 bg-white p-8 shadow-sm animate-pulse"
+                >
+                  <div className="mb-7 h-16 w-16 rounded-2xl bg-slate-200"></div>
+                  <div className="mb-6 h-7 w-3/4 rounded bg-slate-200"></div>
+                  <div className="mb-6 h-1 w-14 rounded-full bg-slate-200"></div>
+                  <div className="space-y-3">
+                    <div className="h-4 rounded bg-slate-200"></div>
+                    <div className="h-4 w-11/12 rounded bg-slate-200"></div>
+                    <div className="h-4 w-8/12 rounded bg-slate-200"></div>
                   </div>
-                ))
+                </div>
+              ))
               : (services.length ? services : defaultServices).map((service, index) => (
-                  <div
-                    key={index}
-                    className="group relative rounded-[32px] border border-slate-200 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:border-slate-300 hover:shadow-2xl flex flex-col justify-between"
-                  >
-                    <div>
-                      {/* Icon */}
-                      <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-slate-200 bg-slate-100 text-slate-800 transition-all duration-300 group-hover:scale-110 group-hover:bg-slate-900 group-hover:text-white shadow-sm">
-                        {service.icon || icons[index % icons.length]}
-                      </div>
-
-                      {/* Title */}
-                      <h3 className="mb-3 text-2xl font-bold tracking-tight text-slate-900 leading-snug">
-                        {service.title || service.name}
-                      </h3>
-
-                      {/* Divider */}
-                      <div className="mb-4 h-1 w-14 rounded-full bg-slate-300 transition-all duration-300 group-hover:w-20 group-hover:bg-slate-700" />
-
-                      {/* Description */}
-                      <p className="leading-relaxed text-slate-600 text-sm">
-                        {service.desc || service.description}
-                      </p>
-
-                      {/* Feature Bullet Points */}
-                      {service.features && (
-                        <ul className="mt-5 space-y-2 border-t border-slate-100 pt-4">
-                          {service.features.map((feat, fIdx) => (
-                            <li key={fIdx} className="flex items-center gap-2 text-xs font-semibold text-slate-700">
-                              <CheckCircle2 size={16} className="text-teal-600 shrink-0" />
-                              <span>{feat}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
+                <div
+                  key={index}
+                  className="group relative rounded-[32px] border border-slate-200 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:border-slate-300 hover:shadow-2xl flex flex-col justify-between"
+                >
+                  <div>
+                    {/* Icon */}
+                    <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-slate-200 bg-slate-100 text-slate-800 transition-all duration-300 group-hover:scale-110 group-hover:bg-slate-900 group-hover:text-white shadow-sm">
+                      {service.icon || icons[index % icons.length]}
                     </div>
 
-                    {/* Quick Inquiry CTA Button */}
-                    <div className="mt-8 pt-4 border-t border-slate-100">
-                      <Link href={makeLink("/contact")}>
-                        <button className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl border border-slate-200 bg-slate-50 group-hover:bg-slate-900 group-hover:text-white text-slate-800 text-sm font-semibold transition-all duration-300 cursor-pointer">
-                          <span>Ask For Price</span>
-                          <ArrowRight size={16} />
-                        </button>
-                      </Link>
-                    </div>
+                    {/* Title */}
+                    <h3 className="mb-3 text-2xl font-bold tracking-tight text-slate-900 leading-snug">
+                      {service.title || service.name}
+                    </h3>
+
+                    {/* Divider */}
+                    <div className="mb-4 h-1 w-14 rounded-full bg-slate-300 transition-all duration-300 group-hover:w-20 group-hover:bg-slate-700" />
+
+                    {/* Description */}
+                    <p className="leading-relaxed text-slate-600 text-sm">
+                      {service.desc || service.description}
+                    </p>
+
+                    {/* Feature Bullet Points */}
+                    {service.features && (
+                      <ul className="mt-5 space-y-2 border-t border-slate-100 pt-4">
+                        {service.features.map((feat, fIdx) => (
+                          <li key={fIdx} className="flex items-center gap-2 text-xs font-semibold text-slate-700">
+                            <CheckCircle2 size={16} className="text-teal-600 shrink-0" />
+                            <span>{feat}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
-                ))}
+
+                  {/* Quick Inquiry CTA Button */}
+                  <div className="mt-8 pt-4 border-t border-slate-100">
+                    <Link href={makeLink("/contact")}>
+                      <button className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl border border-slate-200 bg-slate-50 group-hover:bg-slate-900 group-hover:text-white text-slate-800 text-sm font-semibold transition-all duration-300 cursor-pointer">
+                        <span>Ask For Price</span>
+                        <ArrowRight size={16} />
+                      </button>
+                    </Link>
+                  </div>
+                </div>
+              ))}
           </div>
         </div>
       </section>
@@ -298,9 +296,8 @@ export default function ServicesPage({ city = "" }) {
                     </span>
                     <ChevronDown
                       size={20}
-                      className={`text-slate-500 transition-transform duration-300 shrink-0 ${
-                        isOpen ? "rotate-180 text-teal-600" : ""
-                      }`}
+                      className={`text-slate-500 transition-transform duration-300 shrink-0 ${isOpen ? "rotate-180 text-teal-600" : ""
+                        }`}
                     />
                   </button>
                   {isOpen && (
@@ -319,4 +316,4 @@ export default function ServicesPage({ city = "" }) {
       <CTASection city={city} />
     </>
   );
-}
+}

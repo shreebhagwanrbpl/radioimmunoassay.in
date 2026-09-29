@@ -1,13 +1,7 @@
 "use client";
+import { getDoc, doc, db } from "@/lib/api-data-client";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import {
-  doc,
-  getDoc,
-  addDoc,
-  collection,
-} from "firebase/firestore";
-import { db } from "@/lib/firebase";
 import toast from "react-hot-toast";
 import {
   Mail,
@@ -80,18 +74,7 @@ export default function ContactPage() {
     try {
       setSubmitting(true);
 
-      await addDoc(
-        collection(
-          db,
-          "websitesQueries",
-          "haemoglobinstripcom",
-          "contactQueries"
-        ),
-        {
-          ...form,
-          createdAt: new Date(),
-        }
-      );
+      await fetch("/api/contact-query", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({...form, createdAt:new Date().toISOString()}) }).then(async r=>{ if(!r.ok) throw new Error((await r.json()).error||"Submission failed"); });
 
       toast.success(
         "Message submitted successfully"
@@ -145,33 +128,7 @@ export default function ContactPage() {
 
     loadDistrict();
   }, [currentDistrict]);
-  useEffect(() => {
-    const loadContact = async () => {
-      try {
-        const snap = await getDoc(
-          doc(
-            db,
-            "websites",
-            "haemoglobinstripcom",
-            "pages",
-            "contact"
-          )
-        );
-
-        if (snap.exists()) {
-          setContactInfo(
-            snap.data().contactInfo || []
-          );
-        }
-      } catch (err) {
-        console.log(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadContact();
-  }, []);
+  useEffect(() => { fetch("/api/site-data?page=contact", {cache:"no-store"}).then(r=>r.json()).then(d=>setContactInfo(d?.contactInfo || [])).catch(console.error).finally(()=>setLoading(false)); }, []);
 
 
 

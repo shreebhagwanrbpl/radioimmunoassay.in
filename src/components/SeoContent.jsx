@@ -241,4 +241,4 @@ export default function SeoContent({ city = "" }) {
             </div>
         </section>
     );
-}
+}
