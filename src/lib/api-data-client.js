@@ -1,25 +1,6 @@
-export const db = {};
-export function doc(_db, ...parts){ return { path: parts.join("/") }; }
-export function collection(_db, ...parts){ return { path: parts.join("/") }; }
-export async function getDoc(ref){
-  const r=await fetch(`/api/legacy-data?path=${encodeURIComponent(ref.path)}`,{cache:"no-store"});
-  const data=await r.json();
-  return { exists:()=>Boolean(data?.data), data:()=>data?.data||{} };
-}
-export async function getDocs(ref){
-  const r=await fetch(`/api/legacy-data?path=${encodeURIComponent(ref.path)}`,{cache:"no-store"});
-  const data=await r.json(); const docs=(data?.docs||[]).map(x=>({id:x.id,data:()=>x.data}));
-  return { empty:docs.length===0, docs, forEach:(fn)=>docs.forEach(fn) };
-}
-export async function addDoc(ref,data){
-  const path=ref.path||"";
-  const endpoint=path.includes("productQueries")?"/api/product-query":"/api/contact-query";
-  const r=await fetch(endpoint,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});
-  if(!r.ok) throw new Error((await r.text())||"Submission failed");
-  return r.json();
-}
-export function onSnapshot(ref,onNext,onError){
-  let stopped=false;
-  const run=async()=>{try{const snap=await getDoc(ref);if(!stopped)onNext({exists:snap.exists,data:snap.data});}catch(e){if(!stopped&&onError)onError(e);}};
-  run(); const timer=setInterval(run,3000); return ()=>{stopped=true;clearInterval(timer);};
-}
+export const db={};export function doc(_db,...parts){return {path:parts.join("/")}}export function collection(_db,...parts){return {path:parts.join("/")}}
+async function site(page,district=""){const q=district?`?type=district&district=${encodeURIComponent(district)}`:`?page=${encodeURIComponent(page)}`;const r=await fetch(`/api/site-data${q}&_t=${Date.now()}`,{cache:"no-store"});if(!r.ok)throw new Error(`Site data API ${r.status}`);const d=await r.json();return d?.data!==undefined?d.data:d;}
+export async function getDoc(ref){const p=String(ref?.path||"").split("/"),pi=p.indexOf("pages"),di=p.indexOf("districts");if(pi>=0){const d=await site(p[pi+1]||"home");return {exists:()=>!!d&&Object.keys(d).length>0,data:()=>d||{}}}if(di>=0){const d=await site("district",p[di+1]||"");return {exists:()=>!!d&&Object.keys(d).length>0,data:()=>d||{}}}return {exists:()=>false,data:()=>({})}}
+export async function getDocs(ref){const path=String(ref?.path||"");if(path.includes("districts")){const r=await fetch(`/api/site-data?page=districts&_t=${Date.now()}`,{cache:"no-store"}),d=await r.json(),docs=(d?.districts||[]).map(x=>({id:x.id||x.slug,data:()=>x}));return {empty:!docs.length,docs,forEach:fn=>docs.forEach(fn)}}const r=await fetch(`/api/catalog?_t=${Date.now()}`,{cache:"no-store"}),d=await r.json(),l=Array.isArray(d)?d:(d?.products||[]),docs=l.map((x,i)=>({id:x.id||x.uid||x.slug||String(i),data:()=>x}));return {empty:!docs.length,docs,forEach:fn=>docs.forEach(fn)}}
+export async function addDoc(ref,data){const ep=String(ref?.path||"").includes("productQueries")?"/api/product-query":"/api/contact-query";const r=await fetch(ep,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data),cache:"no-store"}),d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d?.error||"Submission failed");return d;}
+export function onSnapshot(ref,onNext,onError){let stop=false;const run=async()=>{try{const s=await getDoc(ref);if(!stop)onNext({exists:s.exists,data:s.data})}catch(e){if(!stop&&onError)onError(e)}};run();const t=setInterval(run,5000);return ()=>{stop=true;clearInterval(t)}}

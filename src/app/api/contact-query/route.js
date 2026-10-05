@@ -1,4 +1,1 @@
-import { NextResponse } from "next/server";
-import { adminApiFetch } from "@/lib/admin-api";
-export const dynamic="force-dynamic";
-export async function POST(req){ try{ const body=await req.json(); const data=await adminApiFetch("/contact-query",{method:"POST",body:JSON.stringify(body)}); return NextResponse.json(data); }catch(e){ console.error(e); return NextResponse.json({success:false,error:e.message},{status:500}); } }
+import { NextResponse } from "next/server";import { submitAdminQuery } from "@/lib/admin-api";export const runtime="nodejs";export const dynamic="force-dynamic";export const revalidate=0;export const fetchCache="force-no-store";export async function POST(req){try{const body=await req.json();const data=await submitAdminQuery("/api/contact-query",body);return NextResponse.json({success:true,...data},{headers:{"Cache-Control":"no-store"}})}catch(e){console.error("[api/contact-query]",e);return NextResponse.json({success:false,error:e.message||"Request failed"},{status:500})}}

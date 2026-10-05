@@ -7,17 +7,13 @@ import {
   ArrowRight,
   ShieldCheck,
   Microscope,
-  BadgeCheck,
   ChevronLeft,
   ChevronRight,
-  Activity,
   FlaskConical,
   Award,
-  Sparkles,
   PhoneCall,
   CheckCircle2,
   Zap,
-  TrendingUp,
 } from "lucide-react";
 
 export default function HeroSection({ city }) {
@@ -32,7 +28,15 @@ export default function HeroSection({ city }) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
-  useEffect(() => { fetch("/api/site-data?page=home", { cache: "no-store" }).then(r => r.json()).then(d => { if (d && Object.keys(d).length) setHeroData(d); }).catch(console.error).finally(() => setLoading(false)); }, []);
+  useEffect(() => {
+    fetch("/api/site-data?page=home", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((d) => {
+        if (d && Object.keys(d).length) setHeroData(d);
+      })
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
 
   // District Routing
   const districtSlug = city ? city.toLowerCase().replace(/\s+/g, "-") : "";
@@ -106,20 +110,20 @@ export default function HeroSection({ city }) {
 
   return (
     <section
-      className="relative overflow-hidden bg-gradient-to-b from-slate-50 via-white to-blue-50/30 py-12 lg:py-20"
+      className="relative overflow-hidden bg-gradient-to-b from-slate-50 via-white to-blue-50/20 py-8 sm:py-10 lg:py-12"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
       {/* Soft Decorative Glow Circles */}
-      <div className="absolute top-10 left-1/4 w-96 h-96 bg-teal-100/40 rounded-full blur-3xl pointer-events-none -z-10" />
-      <div className="absolute bottom-10 right-10 w-96 h-96 bg-blue-100/40 rounded-full blur-3xl pointer-events-none -z-10" />
+      <div className="absolute top-10 left-1/4 w-80 h-80 bg-teal-100/30 rounded-full blur-3xl pointer-events-none -z-10" />
+      <div className="absolute bottom-10 right-10 w-80 h-80 bg-blue-100/30 rounded-full blur-3xl pointer-events-none -z-10" />
 
       <div className="container-custom">
-        <div className="grid lg:grid-cols-12 gap-12 items-center min-h-[580px]">
+        <div className="grid lg:grid-cols-12 gap-8 lg:gap-10 items-center">
           {/* Left Content (7 Cols) */}
-          <div className="lg:col-span-7 space-y-6">
+          <div className="lg:col-span-7 space-y-4 sm:space-y-5">
             {/* Top Slide Progress Bar */}
-            <div className="w-full max-w-xs h-1.5 bg-slate-200 rounded-full overflow-hidden mb-6">
+            <div className="w-40 h-1 bg-slate-200 rounded-full overflow-hidden mb-2">
               <motion.div
                 key={currentSlide}
                 initial={{ width: "0%" }}
@@ -132,37 +136,37 @@ export default function HeroSection({ city }) {
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentSlide}
-                initial={{ opacity: 0, x: -30 }}
+                initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 30 }}
-                transition={{ duration: 0.4 }}
-                className="space-y-6"
+                exit={{ opacity: 0, x: 20 }}
+                transition={{ duration: 0.35 }}
+                className="space-y-4 sm:space-y-4"
               >
                 {/* Badge */}
                 <div
-                  className={`inline-flex items-center gap-2.5 px-4 py-2 rounded-full border ${activeSlide.badgeColor} text-sm font-bold tracking-wide shadow-sm`}
+                  className={`inline-flex items-center gap-2 px-3.5 py-1 rounded-full border ${activeSlide.badgeColor} text-xs sm:text-sm font-bold tracking-wide shadow-xs`}
                 >
-                  <BadgeIcon size={18} />
+                  <BadgeIcon size={16} />
                   <span>{activeSlide.badge}</span>
                   {city && (
-                    <span className="bg-slate-900 text-white px-2.5 py-0.5 rounded-full text-xs uppercase font-extrabold ml-1">
+                    <span className="bg-slate-900 text-white px-2 py-0.5 rounded-full text-[10px] uppercase font-extrabold ml-1">
                       {city}
                     </span>
                   )}
                 </div>
 
                 {/* Main Heading */}
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-[1.15] tracking-tight">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-extrabold text-slate-900 leading-[1.18] tracking-tight">
                   {loading ? (
-                    <div className="animate-pulse space-y-3">
-                      <div className="h-12 bg-slate-200 rounded-xl w-3/4"></div>
-                      <div className="h-12 bg-slate-200 rounded-xl w-1/2"></div>
+                    <div className="animate-pulse space-y-2">
+                      <div className="h-9 bg-slate-200 rounded-lg w-3/4"></div>
+                      <div className="h-9 bg-slate-200 rounded-lg w-1/2"></div>
                     </div>
                   ) : (
                     <>
                       {activeSlide.title}
                       {city && (
-                        <span className="block mt-2 text-teal-600 font-extrabold">
+                        <span className="block mt-1 text-teal-600 font-extrabold">
                           in {city}
                         </span>
                       )}
@@ -171,7 +175,7 @@ export default function HeroSection({ city }) {
                 </h1>
 
                 {/* Subtitle */}
-                <p className="text-slate-600 text-lg leading-relaxed max-w-xl">
+                <p className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-xl">
                   {activeSlide.description}
                   {city && (
                     <span className="text-slate-800 font-semibold ml-1">
@@ -181,17 +185,17 @@ export default function HeroSection({ city }) {
                 </p>
 
                 {/* Action Buttons */}
-                <div className="flex flex-wrap items-center gap-4 pt-4">
+                <div className="flex flex-wrap items-center gap-3 pt-2">
                   <Link href={activeSlide.btn1Link}>
-                    <button className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-slate-900 text-white font-bold text-base shadow-lg hover:bg-slate-800 hover:shadow-xl transition-all duration-300 cursor-pointer">
+                    <button className="inline-flex items-center justify-center gap-2 px-6 py-2.5 sm:py-3 rounded-xl bg-slate-900 text-white font-bold text-sm sm:text-base shadow-md hover:bg-slate-800 hover:shadow-lg transition-all duration-300 cursor-pointer">
                       <span>{activeSlide.btn1}</span>
-                      <ArrowRight size={18} />
+                      <ArrowRight size={16} />
                     </button>
                   </Link>
 
                   <Link href={activeSlide.btn2Link}>
-                    <button className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl border border-slate-300 bg-white text-slate-800 font-bold text-base shadow-sm hover:bg-slate-50 hover:border-slate-400 transition-all duration-300 cursor-pointer">
-                      <PhoneCall size={18} className="text-teal-600" />
+                    <button className="inline-flex items-center justify-center gap-2 px-6 py-2.5 sm:py-3 rounded-xl border border-slate-300 bg-white text-slate-800 font-bold text-sm sm:text-base shadow-xs hover:bg-slate-50 hover:border-slate-400 transition-all duration-300 cursor-pointer">
+                      <PhoneCall size={16} className="text-teal-600" />
                       <span>{activeSlide.btn2}</span>
                     </button>
                   </Link>
@@ -200,208 +204,205 @@ export default function HeroSection({ city }) {
             </AnimatePresence>
 
             {/* Permanent Stats Row */}
-            <div className="grid grid-cols-3 gap-6 pt-8 border-t border-slate-200">
-              <div className="border-l-4 border-teal-500 pl-4">
-                <div className="text-3xl font-extrabold text-slate-900">10+</div>
-                <div className="text-xs sm:text-sm text-slate-500 font-semibold mt-0.5">Years Helping Labs</div>
+            <div className="grid grid-cols-3 gap-3 sm:gap-4 pt-4 mt-4 border-t border-slate-200">
+              <div className="border-l-3 border-teal-500 pl-3">
+                <div className="text-2xl sm:text-3xl font-black text-slate-900">10+</div>
+                <div className="text-[11px] sm:text-xs text-slate-500 font-medium">Years Helping Labs</div>
               </div>
-              <div className="border-l-4 border-blue-500 pl-4">
-                <div className="text-3xl font-extrabold text-slate-900">500+</div>
-                <div className="text-xs sm:text-sm text-slate-500 font-semibold mt-0.5">Machines Installed</div>
+              <div className="border-l-3 border-blue-500 pl-3">
+                <div className="text-2xl sm:text-3xl font-black text-slate-900">500+</div>
+                <div className="text-[11px] sm:text-xs text-slate-500 font-medium">Machines Installed</div>
               </div>
-              <div className="border-l-4 border-indigo-500 pl-4">
-                <div className="text-3xl font-extrabold text-slate-900">100%</div>
-                <div className="text-xs sm:text-sm text-slate-500 font-semibold mt-0.5">Tested Quality</div>
+              <div className="border-l-3 border-indigo-500 pl-3">
+                <div className="text-2xl sm:text-3xl font-black text-slate-900">100%</div>
+                <div className="text-[11px] sm:text-xs text-slate-500 font-medium">Tested Quality</div>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Animated Medical Graphic Showcase (Light Theme) (5 Cols) */}
-          <div className="lg:col-span-5 relative flex items-center justify-center">
+          {/* Right Column: Animated Medical Graphic Showcase (5 Cols) */}
+          <div className="lg:col-span-5 relative flex flex-col items-center justify-center">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentSlide}
-                initial={{ opacity: 0, scale: 0.95 }}
+                initial={{ opacity: 0, scale: 0.96 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 1.05 }}
-                transition={{ duration: 0.4 }}
+                exit={{ opacity: 0, scale: 1.04 }}
+                transition={{ duration: 0.35 }}
                 className="w-full"
               >
                 {activeSlide.visualType === "hematology" && (
-                  <div className="relative rounded-[36px] border border-slate-200/80 bg-white/90 backdrop-blur-xl p-8 shadow-2xl space-y-6">
+                  <div className="relative rounded-2xl sm:rounded-3xl border border-slate-200/80 bg-white/95 backdrop-blur-xl p-5 sm:p-6 shadow-xl space-y-4">
                     {/* Header */}
-                    <div className="flex items-center justify-between border-b border-slate-100 pb-5">
+                    <div className="flex items-center justify-between border-b border-slate-100 pb-3.5">
                       <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-2xl bg-teal-50 border border-teal-100 flex items-center justify-center text-teal-600 shadow-sm">
-                          <Microscope size={26} />
+                        <div className="w-10 h-10 rounded-xl bg-teal-50 border border-teal-100 flex items-center justify-center text-teal-600 shadow-xs">
+                          <Microscope size={22} />
                         </div>
                         <div>
-                          <h4 className="font-extrabold text-slate-900 text-lg">
+                          <h4 className="font-bold text-slate-900 text-base">
                             Blood Testing Machine
                           </h4>
-                          <p className="text-xs text-slate-500 font-medium">
+                          <p className="text-[11px] text-slate-500 font-medium">
                             Automatic 3-Part & 5-Part Cell Counters
                           </p>
                         </div>
                       </div>
-                      <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-teal-100 text-teal-800 border border-teal-200">
-                        Tested Systems
+                      <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-teal-100 text-teal-800 border border-teal-200">
+                        Tested
                       </span>
                     </div>
 
-                    {/* Animated Pulse Wave Visual (GIF feel via SVG animation) */}
-                    <div className="relative h-40 rounded-2xl bg-slate-900 overflow-hidden p-4 flex flex-col justify-between shadow-inner">
-                      {/* Grid Background */}
-                      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff10_1px,transparent_1px),linear-gradient(to_bottom,#ffffff10_1px,transparent_1px)] bg-[size:1.5rem_1.5rem]" />
+                    {/* Animated Pulse Wave Visual */}
+                    <div className="relative h-28 sm:h-32 rounded-xl bg-slate-900 overflow-hidden p-3.5 flex flex-col justify-between shadow-inner">
+                      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff10_1px,transparent_1px),linear-gradient(to_bottom,#ffffff10_1px,transparent_1px)] bg-[size:1.25rem_1.25rem]" />
 
-                      <div className="relative z-10 flex items-center justify-between text-xs text-teal-400 font-mono">
-                        <span>READING_STATUS: READY</span>
+                      <div className="relative z-10 flex items-center justify-between text-[11px] text-teal-400 font-mono">
+                        <span>STATUS: READY</span>
                         <span className="flex items-center gap-1">
-                          <span className="w-2 h-2 rounded-full bg-teal-400 animate-ping" />
+                          <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-ping" />
                           TESTING
                         </span>
                       </div>
 
-                      {/* Animated Laser Scanline */}
+                      {/* Laser Scanline */}
                       <div className="relative z-10 my-auto">
-                        <svg className="w-full h-16 stroke-teal-400 fill-none stroke-2" viewBox="0 0 400 60">
+                        <svg className="w-full h-12 stroke-teal-400 fill-none stroke-2" viewBox="0 0 400 60">
                           <path d="M0,30 Q30,30 50,10 T90,50 T130,30 T170,10 T210,50 T250,30 T300,20 T350,40 T400,30" />
                         </svg>
-                        <div className="absolute top-0 bottom-0 w-1 bg-gradient-to-b from-transparent via-teal-300 to-transparent animate-[ping_2s_infinite]" />
                       </div>
 
-                      <div className="relative z-10 flex items-center justify-between text-[11px] text-slate-400 font-mono">
-                        <span>ACCURACY: HIGH PRECISION</span>
-                        <span>SPEED: FAST RESULTS</span>
+                      <div className="relative z-10 flex items-center justify-between text-[10px] text-slate-400 font-mono">
+                        <span>HIGH ACCURACY</span>
+                        <span>FAST SPEED</span>
                       </div>
                     </div>
 
                     {/* Data Chips */}
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100">
-                        <span className="text-xs text-slate-500 font-semibold block">WBC Count</span>
-                        <span className="text-lg font-extrabold text-slate-900">7.4 × 10³/µL</span>
+                    <div className="grid grid-cols-2 gap-2.5">
+                      <div className="p-2.5 sm:p-3 rounded-xl bg-slate-50 border border-slate-100">
+                        <span className="text-[11px] text-slate-500 font-medium block">WBC Count</span>
+                        <span className="text-base font-extrabold text-slate-900">7.4 × 10³/µL</span>
                       </div>
-                      <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100">
-                        <span className="text-xs text-slate-500 font-semibold block">Hemoglobin</span>
-                        <span className="text-lg font-extrabold text-slate-900">14.6 g/dL</span>
+                      <div className="p-2.5 sm:p-3 rounded-xl bg-slate-50 border border-slate-100">
+                        <span className="text-[11px] text-slate-500 font-medium block">Hemoglobin</span>
+                        <span className="text-base font-extrabold text-slate-900">14.6 g/dL</span>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-2 text-xs text-slate-600 font-semibold pt-1">
-                      <CheckCircle2 size={16} className="text-teal-600 shrink-0" />
-                      <span>Includes On-site Setup, Testing, and Local Field Care</span>
+                    <div className="flex items-center gap-2 text-xs text-slate-600 font-medium pt-0.5">
+                      <CheckCircle2 size={15} className="text-teal-600 shrink-0" />
+                      <span>Includes On-site Setup, Calibration & Engineer Care</span>
                     </div>
                   </div>
                 )}
 
                 {activeSlide.visualType === "reagents" && (
-                  <div className="relative rounded-[36px] border border-slate-200/80 bg-white/90 backdrop-blur-xl p-8 shadow-2xl space-y-6">
-                    <div className="flex items-center justify-between border-b border-slate-100 pb-5">
+                  <div className="relative rounded-2xl sm:rounded-3xl border border-slate-200/80 bg-white/95 backdrop-blur-xl p-5 sm:p-6 shadow-xl space-y-4">
+                    <div className="flex items-center justify-between border-b border-slate-100 pb-3.5">
                       <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 shadow-sm">
-                          <FlaskConical size={26} />
+                        <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 shadow-xs">
+                          <FlaskConical size={22} />
                         </div>
                         <div>
-                          <h4 className="font-extrabold text-slate-900 text-lg">
+                          <h4 className="font-bold text-slate-900 text-base">
                             Lab Reagents & Kits
                           </h4>
-                          <p className="text-xs text-slate-500 font-medium">
-                            RIA & Chemical Testing Kits
+                          <p className="text-[11px] text-slate-500 font-medium">
+                            RIA & Chemical Testing Supplies
                           </p>
                         </div>
                       </div>
-                      <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-blue-100 text-blue-800 border border-blue-200">
+                      <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-100 text-blue-800 border border-blue-200">
                         Fresh Stock
                       </span>
                     </div>
 
-                    {/* Interactive Graphic */}
-                    <div className="p-6 rounded-2xl bg-gradient-to-br from-blue-50 via-teal-50 to-white border border-blue-100 space-y-4">
+                    <div className="p-4 rounded-xl bg-gradient-to-br from-blue-50 via-teal-50 to-white border border-blue-100 space-y-3">
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <Zap size={18} className="text-blue-600" />
-                          <span className="text-xs font-extrabold text-slate-800 uppercase tracking-wider">
-                            Safe Temperature Shipping
+                        <div className="flex items-center gap-1.5">
+                          <Zap size={15} className="text-blue-600" />
+                          <span className="text-[11px] font-bold text-slate-800 uppercase tracking-wider">
+                            Cold-Chain Shipping
                           </span>
                         </div>
-                        <span className="text-xs font-bold text-blue-600">Ready Supply</span>
+                        <span className="text-[11px] font-bold text-blue-600">Verified</span>
                       </div>
 
-                      <div className="space-y-2">
+                      <div className="space-y-1.5">
                         <div className="flex justify-between text-xs font-bold text-slate-700">
                           <span>Testing Purity</span>
                           <span>99.9%</span>
                         </div>
-                        <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+                        <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
                           <div className="h-full bg-gradient-to-r from-blue-500 to-teal-500 w-[99.9%]" />
                         </div>
                       </div>
 
-                      <p className="text-xs text-slate-600 leading-relaxed pt-1">
-                        Formulated for clear, dependable results in daily laboratory testing.
+                      <p className="text-[11px] text-slate-600 leading-relaxed">
+                        Formulated for high precision and consistent repeatability.
                       </p>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100">
-                        <span className="text-xs text-slate-500 font-semibold block">Cold Storage</span>
-                        <span className="text-base font-extrabold text-slate-900">2°C to 8°C Safe</span>
+                    <div className="grid grid-cols-2 gap-2.5">
+                      <div className="p-2.5 sm:p-3 rounded-xl bg-slate-50 border border-slate-100">
+                        <span className="text-[11px] text-slate-500 font-medium block">Cold Storage</span>
+                        <span className="text-sm font-extrabold text-slate-900">2°C to 8°C Safe</span>
                       </div>
-                      <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100">
-                        <span className="text-xs text-slate-500 font-semibold block">Quick Dispatch</span>
-                        <span className="text-base font-extrabold text-slate-900">24-Hour Shipping</span>
+                      <div className="p-2.5 sm:p-3 rounded-xl bg-slate-50 border border-slate-100">
+                        <span className="text-[11px] text-slate-500 font-medium block">Fast Dispatch</span>
+                        <span className="text-sm font-extrabold text-slate-900">24-48 Hours</span>
                       </div>
                     </div>
                   </div>
                 )}
 
                 {activeSlide.visualType === "turnkey" && (
-                  <div className="relative rounded-[36px] border border-slate-200/80 bg-white/90 backdrop-blur-xl p-8 shadow-2xl space-y-6">
-                    <div className="flex items-center justify-between border-b border-slate-100 pb-5">
+                  <div className="relative rounded-2xl sm:rounded-3xl border border-slate-200/80 bg-white/95 backdrop-blur-xl p-5 sm:p-6 shadow-xl space-y-4">
+                    <div className="flex items-center justify-between border-b border-slate-100 pb-3.5">
                       <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 shadow-sm">
-                          <Award size={26} />
+                        <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 shadow-xs">
+                          <Award size={22} />
                         </div>
                         <div>
-                          <h4 className="font-extrabold text-slate-900 text-lg">
+                          <h4 className="font-bold text-slate-900 text-base">
                             Full Lab Setup Service
                           </h4>
-                          <p className="text-xs text-slate-500 font-medium">
-                            Machine Setup & Support
+                          <p className="text-[11px] text-slate-500 font-medium">
+                            Machine Setup & Staff Training
                           </p>
                         </div>
                       </div>
-                      <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-indigo-100 text-indigo-800 border border-indigo-200">
-                        Quick Assistance
+                      <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-indigo-100 text-indigo-800 border border-indigo-200">
+                        On-Site
                       </span>
                     </div>
 
-                    <div className="p-6 rounded-2xl bg-slate-900 text-white space-y-4 shadow-xl">
+                    <div className="p-4 rounded-xl bg-slate-900 text-white space-y-2.5 shadow-md">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-mono text-teal-400 uppercase tracking-widest">
+                        <span className="text-[10px] font-mono text-teal-400 uppercase tracking-widest">
                           DIRECT_HELPLINE
                         </span>
-                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+                        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                       </div>
 
-                      <h5 className="text-xl font-extrabold text-white">
-                        Complete On-Site Training & Repair
+                      <h5 className="text-sm sm:text-base font-bold text-white">
+                        Complete On-Site Training & AMC Support
                       </h5>
 
-                      <p className="text-xs text-slate-300 leading-relaxed">
-                        Our technicians come directly to your facility to help set up machines, train staff, and fix issues quickly.
+                      <p className="text-[11px] text-slate-300 leading-relaxed">
+                        Our technicians handle machine installation, test calibration, and staff operation training.
                       </p>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100">
-                        <span className="text-xs text-slate-500 font-semibold block">Path Labs Built</span>
-                        <span className="text-lg font-extrabold text-slate-900">150+ Labs</span>
+                    <div className="grid grid-cols-2 gap-2.5">
+                      <div className="p-2.5 sm:p-3 rounded-xl bg-slate-50 border border-slate-100">
+                        <span className="text-[11px] text-slate-500 font-medium block">Path Labs Built</span>
+                        <span className="text-base font-extrabold text-slate-900">150+ Labs</span>
                       </div>
-                      <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100">
-                        <span className="text-xs text-slate-500 font-semibold block">Help Response</span>
-                        <span className="text-lg font-extrabold text-slate-900">Same Day</span>
+                      <div className="p-2.5 sm:p-3 rounded-xl bg-slate-50 border border-slate-100">
+                        <span className="text-[11px] text-slate-500 font-medium block">Repair Response</span>
+                        <span className="text-base font-extrabold text-slate-900">Same Day</span>
                       </div>
                     </div>
                   </div>
@@ -410,33 +411,34 @@ export default function HeroSection({ city }) {
             </AnimatePresence>
 
             {/* Slider Dots & Navigation Controls */}
-            <div className="absolute -bottom-10 flex items-center justify-between w-full px-2">
-              <div className="flex items-center gap-2">
+            <div className="flex items-center justify-between w-full px-2 mt-4">
+              <div className="flex items-center gap-1.5">
                 {slides.map((_, idx) => (
                   <button
                     key={idx}
                     onClick={() => setCurrentSlide(idx)}
-                    className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${currentSlide === idx ? "w-8 bg-slate-900" : "w-2.5 bg-slate-300 hover:bg-slate-400"
-                      }`}
+                    className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                      currentSlide === idx ? "w-6 bg-slate-900" : "w-2 bg-slate-300 hover:bg-slate-400"
+                    }`}
                     aria-label={`Slide ${idx + 1}`}
                   />
                 ))}
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
                 <button
                   onClick={prevSlide}
-                  className="w-9 h-9 rounded-full border border-slate-200 bg-white hover:bg-slate-100 text-slate-800 flex items-center justify-center transition-all shadow-sm cursor-pointer"
+                  className="w-8 h-8 rounded-full border border-slate-200 bg-white hover:bg-slate-100 text-slate-800 flex items-center justify-center transition-all shadow-xs cursor-pointer"
                   aria-label="Previous"
                 >
-                  <ChevronLeft size={18} />
+                  <ChevronLeft size={16} />
                 </button>
                 <button
                   onClick={nextSlide}
-                  className="w-9 h-9 rounded-full border border-slate-200 bg-white hover:bg-slate-100 text-slate-800 flex items-center justify-center transition-all shadow-sm cursor-pointer"
+                  className="w-8 h-8 rounded-full border border-slate-200 bg-white hover:bg-slate-100 text-slate-800 flex items-center justify-center transition-all shadow-xs cursor-pointer"
                   aria-label="Next"
                 >
-                  <ChevronRight size={18} />
+                  <ChevronRight size={16} />
                 </button>
               </div>
             </div>
@@ -446,4 +448,3 @@ export default function HeroSection({ city }) {
     </section>
   );
 }
-

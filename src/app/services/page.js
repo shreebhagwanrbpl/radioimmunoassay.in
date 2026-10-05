@@ -212,8 +212,10 @@ export default function ServicesPage({ city = "" }) {
       </section>
 
       {/* Modern 4-Step Working Process */}
-      <section className="section-padding bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-white">
-        <div className="container-custom">
+      <section className="section-padding bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white relative overflow-hidden">
+        <div className="absolute top-1/4 left-10 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-10 right-10 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="container-custom relative z-10">
           {/* Section Title */}
           <SectionTitle
             badge="Our Process"
@@ -224,7 +226,7 @@ export default function ServicesPage({ city = "" }) {
           />
 
           {/* Process Cards */}
-          <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-12 sm:mt-16 grid gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-4">
             {[
               {
                 step: "01",
@@ -249,24 +251,27 @@ export default function ServicesPage({ city = "" }) {
             ].map((item, index) => (
               <div
                 key={index}
-                className="group relative rounded-[28px] border border-white/10 bg-white/5 p-8 backdrop-blur-md shadow-xl transition-all duration-300 hover:-translate-y-2 hover:bg-white/10"
+                className="group relative rounded-3xl border border-white/15 bg-white/[0.06] p-7 sm:p-8 backdrop-blur-md shadow-2xl transition-all duration-300 hover:-translate-y-2 hover:bg-white/[0.12] hover:border-teal-400/40 flex flex-col justify-between"
               >
-                <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-teal-500/20 text-teal-400 font-extrabold text-xl border border-teal-500/30">
-                  {item.step}
+                <div>
+                  <div className="mb-5 sm:mb-6 inline-flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-2xl bg-teal-500/20 text-teal-300 font-extrabold text-lg sm:text-xl border border-teal-400/30 group-hover:scale-110 group-hover:bg-teal-500 group-hover:text-white transition-all duration-300 shadow-md">
+                    {item.step}
+                  </div>
+
+                  <h3 className="text-lg sm:text-xl font-bold tracking-tight text-white mb-3 group-hover:text-teal-300 transition-colors">
+                    {item.title}
+                  </h3>
+
+                  <p className="text-slate-300 text-sm leading-relaxed">
+                    {item.desc}
+                  </p>
                 </div>
-
-                <h3 className="text-xl font-bold tracking-tight text-white mb-3">
-                  {item.title}
-                </h3>
-
-                <p className="text-slate-300 text-sm leading-relaxed">
-                  {item.desc}
-                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
+
 
       {/* Services FAQ Accordion */}
       <section className="section-padding bg-slate-50">
